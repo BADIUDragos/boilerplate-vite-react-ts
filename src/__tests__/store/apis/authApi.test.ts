@@ -1,3 +1,5 @@
+import { describe, it, expect, beforeAll, afterEach, afterAll } from 'vitest';
+
 import { createAuthApiStoreSetup } from "../../../__testUtils__/storesSetups";
 
 import { useLoginMutation } from "../../../store/apis/authApi";
@@ -34,13 +36,13 @@ describe("Login User", () => {
   };
 
   const failedBody: TokensState = {
-    access: null,
-    refresh: null,
+    access: "",
+    refresh: "",
   };
 
   it("runs the userLoginMutation successfully", async () => {
     const initialAuthState: AuthState = {
-      tokens: { access: null, refresh: null },
+      tokens: { access: "", refresh: "" },
       userInfo: null,
     };
 
@@ -49,8 +51,9 @@ describe("Login User", () => {
       userInfo: {
         id: "1",
         username: "user",
+        email: "user@rolls-royce.com",
         permissions: ["view_content"],
-        isStaff: false,
+        isSuperuser: false,
       },
     };
 
@@ -73,7 +76,7 @@ describe("Login User", () => {
     });
 
     expect(result.current[1]).toMatchObject(pendingMutation("login", userArgs));
-    debugger;
+
     await waitFor(() => expect(result.current[1].isSuccess).toBe(true));
 
     expect(result.current[1]).toMatchObject(
@@ -86,7 +89,7 @@ describe("Login User", () => {
 
   it("fails on login", async () => {
     const initialUserInfoState: AuthState = {
-      tokens: { access: null, refresh: null },
+      tokens: { access: "", refresh: "" },
       userInfo: null,
     };
 
