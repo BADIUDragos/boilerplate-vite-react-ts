@@ -29,6 +29,7 @@ describe("ProtectedComponent", () => {
           email: "user@rolls-royce.com",
           permissions: ["view_content"],
           isSuperuser: false,
+          isStaff: false
         },
       },
       ["view_content"]
@@ -47,6 +48,7 @@ describe("ProtectedComponent", () => {
           email: "user@rolls-royce.com",
           permissions: ["other_permission"],
           isSuperuser: false,
+          isStaff: false
         },
       },
       ["view_content"]
@@ -65,6 +67,7 @@ describe("ProtectedComponent", () => {
           email: "user@rolls-royce.com",
           permissions: [],
           isSuperuser: true,
+          isStaff: false
         },
       },
       ["view_content"]

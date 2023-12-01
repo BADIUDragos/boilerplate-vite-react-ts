@@ -1,5 +1,3 @@
-import { SerializedError } from "@reduxjs/toolkit";
-import { BasicResponse } from "../errorHandling/basicError";
 import {
   RefreshToken,
   LoginCredentials,
@@ -33,7 +31,7 @@ const authApi = baseApi.injectEndpoints({
         body: accessToken,
       }),
     }),
-    logout: build.mutation<BasicResponse | SerializedError, RefreshToken>({
+    logout: build.mutation<null, RefreshToken>({
       query: (refresh) => ({
         url: "/auth/logout",
         method: "POST",

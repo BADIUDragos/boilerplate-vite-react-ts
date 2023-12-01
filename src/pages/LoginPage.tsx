@@ -5,13 +5,14 @@ import FormContainer from "../components/FormContainer";
 import { useLoginMutation, useUserInfo } from "../store";
 import Loader from "../components/Loader";
 import { useNavigate } from "react-router-dom";
+import getErrorString from "../store/errorHandling/getErrorString";
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const userInfo = useUserInfo()
+  const userInfo = useUserInfo();
 
-  const [triggerLogin, { isLoading, isError, error }] = useLoginMutation();
+  const [triggerLogin, { isLoading, error }] = useLoginMutation();
 
   const navigate = useNavigate();
 
@@ -20,11 +21,11 @@ const LoginPage: React.FC = () => {
     triggerLogin({ username, password });
   };
 
-  useEffect( () => {
-    if (userInfo){
-      navigate('/')
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/");
     }
-  },[userInfo]) 
+  }, [userInfo]);
 
   return (
     <FormContainer xs={12} md={6} className="justify-content-md-center">
@@ -66,16 +67,11 @@ const LoginPage: React.FC = () => {
         )}
       </Form>
 
-      {isError &&
-        error &&
-        "data" in error &&
-        typeof error.data === "object" &&
-        error.data &&
-        "detail" in error.data && (
-          <Alert variant="danger" className="mt-3">
-            {(error.data as { detail: string }).detail}
-          </Alert>
-        )}
+      {error && (
+        <Alert variant="danger" className="mt-3">
+          {getErrorString(error)}
+        </Alert>
+      )}
     </FormContainer>
   );
 };

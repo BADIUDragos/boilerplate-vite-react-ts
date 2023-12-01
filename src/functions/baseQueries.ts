@@ -9,7 +9,7 @@ import { RootState } from "../store";
 import { TokensState } from "../store/interfaces/authInterfaces";
 import { API_URL } from "../constants/urls";
 import { Mutex } from "async-mutex";
-import isTokenInvalidError from "./typeGuards/isTokenInvalidError";
+import isAccessTokenInvalidError from "./typeGuards/isTokenInvalidError";
 
 const mutex = new Mutex();
 
@@ -30,44 +30,45 @@ export const baseQueryWithReauth: BaseQueryFn<
   unknown,
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
-  await mutex.waitForUnlock();
   let result = await baseQuery(args, api, extraOptions);
-  if (result.error && isTokenInvalidError(result.error)) {
-    const refresh = (api.getState() as RootState).auth.tokens?.refresh;
-    if (!mutex.isLocked()) {
-      const release = await mutex.acquire();
-      try {
-        const refreshResult = await baseQuery(
-          {
-            url: "/auth/login/refresh",
-            method: "POST",
-            body: {
-              refresh: refresh,
+  if (result.error && result.error.status === 401) {
+    if (isAccessTokenInvalidError(result.error.data)) {
+      const refresh = (api.getState() as RootState).auth.tokens?.refresh;
+      if (!mutex.isLocked()) {
+        const release = await mutex.acquire();
+        try {
+          const refreshResult = await baseQuery(
+            {
+              url: "/auth/login/refresh",
+              method: "POST",
+              body: {
+                refresh: refresh,
+              },
             },
-          },
-          api,
-          extraOptions
-        );
-
-        if (refreshResult.data) {
-          const data = refreshResult.data as TokensState;
-          api.dispatch(
-            setCredentials({
-              tokens: data
-            })
+            api,
+            extraOptions
           );
-          result = await baseQuery(args, api, extraOptions);
-        } else {
-          api.dispatch(logOut());
+
+          if (refreshResult.data) {
+            const data = refreshResult.data as TokensState;
+            api.dispatch(
+              setCredentials({
+                tokens: data,
+              })
+            );
+            result = await baseQuery(args, api, extraOptions);
+          } else {
+            api.dispatch(logOut());
+          }
+        } finally {
+          release();
         }
-      } finally {
-        release();
+      } else {
+        await mutex.waitForUnlock();
+        result = await baseQuery(args, api, extraOptions);
       }
-    } else {
-      await mutex.waitForUnlock();
-      result = await baseQuery(args, api, extraOptions);
     }
-  } 
+  }
 
   return result;
 };

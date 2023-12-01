@@ -1,23 +1,22 @@
 import { UserInfoState } from "../../store/interfaces/authInterfaces";
 
 const isAuthorized = (
-  admin: boolean, 
   userInfo: UserInfoState | null, 
-  requiredPermissions: string[] = []
+  requiredPermissions: string[] = [],
+  superuser?: boolean, 
+  staff?: boolean,
 ): boolean => {
   
   let isAuthorized = false;
 
-  if (userInfo) {
-    if (admin) {
-      isAuthorized = userInfo.isSuperuser;
-    } else {
-      isAuthorized = requiredPermissions.every((permission: string) =>
-        userInfo.permissions?.includes(permission)
-      );
-    }
+  if (superuser) {
+    isAuthorized = true
+  } else if (staff === true && userInfo?.isStaff) {
+    isAuthorized = true
   } else {
-    isAuthorized = !admin;
+    isAuthorized = requiredPermissions.every((permission: string) =>
+        userInfo?.permissions?.includes(permission)
+      );
   }
 
   return isAuthorized;

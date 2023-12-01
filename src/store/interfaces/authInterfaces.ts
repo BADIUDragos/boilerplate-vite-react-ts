@@ -9,11 +9,7 @@ export interface UserInfoState {
   permissions: string[]
   email: string
   isSuperuser: boolean
-}
-
-export interface TokensState {
-  access: string
-  refresh: string
+  isStaff: boolean
 }
 
 export interface LoginCredentials {
@@ -28,3 +24,5 @@ export interface AccessToken {
 export interface RefreshToken {
   refresh: string
 }
+
+export type TokensState = AccessToken & RefreshToken;

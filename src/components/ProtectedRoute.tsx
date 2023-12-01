@@ -6,18 +6,20 @@ interface IProtectedRoute {
   children: React.ReactNode;
   redirectUrl?: string;
   requiredPermissions?: string[];
-  admin?: boolean;
+  superuser?: boolean;
+  staff?: boolean;
 }
 
 const ProtectedRoute: React.FC<IProtectedRoute> = ({
   children,
   redirectUrl = "/login",
   requiredPermissions = [],
-  admin = false,
+  superuser = false,
+  staff = false,
 }) => {
   const userInfo = useUserInfo();
 
-  return isAuthorized(admin, userInfo, requiredPermissions) ? <>{children}</> : <Navigate to={redirectUrl} />;
+  return isAuthorized(userInfo, requiredPermissions, superuser, staff) ? <>{children}</> : <Navigate to={redirectUrl} />;
 };
 
 export default ProtectedRoute;
