@@ -4,7 +4,7 @@ export interface AuthState {
 }
 
 export interface UserInfoState {
-  id: string
+  id: number
   username: string
   permissions: string[]
   email: string

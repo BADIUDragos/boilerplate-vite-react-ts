@@ -1,18 +1,20 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
-import { mockStoreAuth } from "../../__testUtils__/mockStores";
+import { authStoreWithPreloadedState } from "../../__testUtils__/mockStores";
 import { AuthState } from "../../store/interfaces/authInterfaces";
 import ProtectedComponent from "../../components/ProtectedComponent";
 
 import "@testing-library/jest-dom/vitest";
 
+
 describe("ProtectedComponent", () => {
-  const setup = (authState: AuthState, requiredPermissions?: string[]) => {
-    const store = mockStoreAuth({ auth: authState });
+  const setup = (authState: AuthState, requiredPermissions?: string[], requiredSuperUser?: boolean, requiredStaff?: boolean) => {
+    const store = authStoreWithPreloadedState({ auth: authState });
     render(
       <Provider store={store}>
-        <ProtectedComponent requiredPermissions={requiredPermissions}>
+        test
+        <ProtectedComponent requiredPermissions={requiredPermissions} requiredSuperUser={requiredSuperUser} requiredStaff={requiredStaff}>
           <div>Protected Content</div>
         </ProtectedComponent>
       </Provider>
@@ -24,7 +26,7 @@ describe("ProtectedComponent", () => {
       {
         tokens: { access: "mock_access_token", refresh: "mock_refresh_token" },
         userInfo: {
-          id: "1",
+          id: 1,
           username: "user",
           email: "user@rolls-royce.com",
           permissions: ["view_content"],
@@ -32,9 +34,11 @@ describe("ProtectedComponent", () => {
           isStaff: false
         },
       },
-      ["view_content"]
+      ["view_content"], true, false
     );
 
+    screen.debug()
+    expect(screen.getByText("test")).toBeInTheDocument();
     expect(screen.getByText("Protected Content")).toBeInTheDocument();
   });
 
@@ -43,7 +47,7 @@ describe("ProtectedComponent", () => {
       {
         tokens: { access: "mock_access_token", refresh: "mock_refresh_token" },
         userInfo: {
-          id: "1",
+          id: 1,
           username: "user",
           email: "user@rolls-royce.com",
           permissions: ["other_permission"],
@@ -57,17 +61,17 @@ describe("ProtectedComponent", () => {
     expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
   });
 
-  it("renders children for staff users regardless of permissions", () => {
+  it("renders children for superuser users regardless of permissions", () => {
     setup(
       {
         tokens: { access: "mock_access_token", refresh: "mock_refresh_token" },
         userInfo: {
-          id: "1",
-          username: "superuser",
+          id: 1,
+          username: "staff",
           email: "user@rolls-royce.com",
           permissions: [],
           isSuperuser: true,
-          isStaff: false
+          isStaff: true
         },
       },
       ["view_content"]
@@ -76,7 +80,26 @@ describe("ProtectedComponent", () => {
     expect(screen.getByText("Protected Content")).toBeInTheDocument();
   });
 
-  it("renders children when login is not required and user is not logged in", () => {
+  it("renders children for staff users when requiredStaff regardless of permissions", () => {
+    setup(
+      {
+        tokens: { access: "mock_access_token", refresh: "mock_refresh_token" },
+        userInfo: {
+          id: 1,
+          username: "staff",
+          email: "user@rolls-royce.com",
+          permissions: [],
+          isSuperuser: false,
+          isStaff: true
+        },
+      },
+      ["view_content"], false, true
+    );
+
+    expect(screen.getByText("Protected Content")).toBeInTheDocument();
+  });
+
+  it("renders children when nothing is required and user is not logged in", () => {
     setup(
       {
         tokens: null,

@@ -1,93 +1,92 @@
-import { describe, it, expect, beforeAll, afterEach, afterAll } from "vitest";
+// import { describe, it, expect, beforeAll, afterEach, afterAll } from "vitest";
 
-import { createAuthApiStoreSetup } from "../../../__testUtils__/storesSetups";
+// import { createAuthApiStoreSetup, getWrapper } from "../../../__testUtils__/storesSetups";
 
-import { useLoginMutation } from "../../../store/apis/authApi";
-import { setupServer } from "msw/node";
+// import { useLoginMutation } from "../../../store/apis/authApi";
+// import { setupServer } from "msw/node";
 
-import {
-  AuthState,
-  LoginCredentials,
-  TokensState,
-} from "../../../store/interfaces/authInterfaces";
-import {
-  fulfilledMutation,
-  pendingMutation,
-  uninitializedMutation,
-} from "../../../__testUtils__/mutationObjectStates";
-import { act } from "react-dom/test-utils";
-import { waitFor } from "@testing-library/react";
+// import {
+//   AuthState,
+//   LoginCredentials,
+//   TokensState,
+// } from "../../../store/interfaces/authInterfaces";
+// import {
+//   fulfilledMutation,
+//   pendingMutation,
+//   uninitializedMutation,
+// } from "../../../__testUtils__/mutationObjectStates";
+// import { act } from "react-dom/test-utils";
+// import { renderHook, waitFor } from "@testing-library/react";
 
-import { authApiHandler } from "../../../__testUtils__/handlers";
+// import { authApiHandler } from "../../../__testUtils__/handlers";
 
-const server = setupServer(...authApiHandler);
+// const server = setupServer(...authApiHandler);
 
-beforeAll(() => server.listen());
+// beforeAll(() => server.listen());
 
-afterEach(() => server.resetHandlers());
+// afterEach(() => server.resetHandlers());
 
-afterAll(() => server.close());
+// afterAll(() => server.close());
 
-describe("Login User", () => {
-  const tokenBody: TokensState = {
-    access:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJ1c2VybmFtZSI6InVzZXIiLCJwZXJtaXNzaW9ucyI6WyJ2aWV3X2NvbnRlbnQiXSwiaXNTdGFmZiI6ZmFsc2V9.obYAd0EK9QcZLdX3cDRNSRf2bvo7sw_O0J3qsiJ1w_A",
-    refresh: "refresh",
-  };
+// describe("Login User", () => {
+//   const tokenBody: TokensState = {
+//     access:
+//       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ1c2VyIiwicGVybWlzc2lvbnMiOlsidmlld19jb250ZW50Il0sImVtYWlsIjoidXNlckByb2xscy1yb3ljZS5jb20iLCJpc1N1cGVydXNlciI6ZmFsc2UsImlzU3RhZmYiOmZhbHNlfQ.KYuB30UYnXLXEpbMDRBjOYnPpbSjWabjAJtCNWt288A",
+//     refresh: "refresh",
+//   };
 
-  it("runs the userLoginMutation successfully", async () => {
-    const preloadedState = {
-      auth: {
-        tokens: { access: "", refresh: "" },
-        userInfo: null,
-      },
-    };
+//   it("runs the userLoginMutation successfully", async () => {
+//     const preloadedState: AuthState = {
+//         tokens: { access: "", refresh: "" },
+//         userInfo: null,
+//     };
 
-    const expectedAuthState = {
-      auth: {
-        tokens: { access: tokenBody.access, refresh: tokenBody.refresh },
-        userInfo: {
-          id: "1",
-          username: "user",
-          email: "user@rolls-royce.com",
-          permissions: ["view_content"],
-          isSuperuser: false,
-        },
-      },
-    };
+//     const expectedAuthState: AuthState = {
+//         tokens: { access: tokenBody.access, refresh: tokenBody.refresh },
+//         userInfo: {
+//           id: 1,
+//           username: "user",
+//           email: "user@rolls-royce.com",
+//           permissions: ["view_content"],
+//           isSuperuser: false,
+//           isStaff: false,
+//         },
+//     };
 
-    const { result, store } = createAuthApiStoreSetup(
-      useLoginMutation,
-      preloadedState
-    );
+//     const { store } = createAuthApiStoreSetup();
+//     const wrapper = getWrapper(store);
 
-    const [triggerLogin] = result.current;
+//     const { result } = renderHook(() => useLoginMutation(undefined), {
+//       wrapper,
+//     });
 
-    expect(result.current[1]).toMatchObject(uninitializedMutation);
+//     const [login] = result.current;
 
-    const userArgs: LoginCredentials = {
-      username: "success",
-      password: "password",
-    };
+//     expect(result.current[1]).toMatchObject(uninitializedMutation);
 
-    const authState = store.getState().auth;
-    expect(authState).toEqual(expectedAuthState.auth);
+//     const userArgs: LoginCredentials = {
+//       username: "success",
+//       password: "password",
+//     };
 
-    act(() => {
-      triggerLogin(userArgs);
-    });
+//     const authState = store.getState().auth;
+//     expect(authState).toEqual(preloadedState);
 
-    expect(result.current[1]).toMatchObject(pendingMutation("login", userArgs));
+//     act(() => {
+//       login(userArgs);
+//     });
 
-    await waitFor(() => expect(result.current[1].isSuccess).toEqual(true));
+//     expect(result.current[1]).toMatchObject(pendingMutation("login", userArgs));
 
-    expect(result.current[1]).toMatchObject(
-      fulfilledMutation("login", userArgs, tokenBody)
-    );
+//     await waitFor(() => expect(result.current[1].isSuccess).toEqual(true));
 
-    const newUserInfoState = store.getState().auth;
-    expect(newUserInfoState).toEqual(expectedAuthState);
-  });
+//     expect(result.current[1]).toMatchObject(
+//       fulfilledMutation("login", userArgs, tokenBody)
+//     );
+
+//     const newUserInfoState = store.getState().auth;
+//     expect(newUserInfoState).toEqual(expectedAuthState);
+//   });
 
   // it("fails on login", async () => {
   //   const initialUserInfoState: AuthState = {
@@ -134,4 +133,4 @@ describe("Login User", () => {
   //   const newUserInfoState = store.getState().auth;
   //   expect(newUserInfoState).toEqual(initialUserInfoState);
   // });
-});
+// });

@@ -1,6 +1,15 @@
-import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
-import { AuthState } from '../store/interfaces/authInterfaces'; 
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import authReducer from "../store/slices/authSlice";
 
-const middlewares = [thunk];
-export const mockStoreAuth = configureMockStore<{ auth: AuthState }>(middlewares);
+export const authStoreWithPreloadedState = (preloadedState: any) => {
+  const store = configureStore({
+    reducer: combineReducers({
+      auth: authReducer,
+    }),
+    preloadedState: preloadedState,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(),
+  });
+
+  return store
+}
