@@ -50,10 +50,9 @@ export const baseQueryWithReauth: BaseQueryFn<
           );
 
           if (refreshResult.data) {
-            const data = refreshResult.data as TokensState;
             api.dispatch(
               setCredentials({
-                tokens: data,
+                tokens: refreshResult.data as TokensState,
               })
             );
             result = await baseQuery(args, api, extraOptions);
