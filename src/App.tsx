@@ -2,8 +2,12 @@ import "./bootstrap.css";
 
 import { RouterProvider } from "react-router-dom";
 import router from "./router/router";
+import { useIdle } from "./functions/hooks/useIdle";
 
 function App() {
+
+  useIdle()
+
   return <RouterProvider router={router} />;
 }
 

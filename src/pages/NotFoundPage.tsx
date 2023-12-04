@@ -1,10 +1,8 @@
-import { useRouteError, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import FormContainer from "../components/FormContainer";
 import { Card, Container } from "react-bootstrap";
 
 const NotFoundPage: React.FC = () => {
-  const error = useRouteError();
-  console.error(error);
 
   return (
     <>

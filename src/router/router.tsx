@@ -11,7 +11,7 @@ const router = createBrowserRouter([
     element: <Layout/>,
     children: [
       { path: "/", element: <HomePage/> },
-      { path: "/login", element: <ProtectedRoute redirectUrl={"/"}><LoginPage/></ProtectedRoute> },
+      { path: "/login", element: <LoginPage/> },
       { path: "*", element: <NotFoundPage/> }
     ],
     errorElement: <ErrorPage />,

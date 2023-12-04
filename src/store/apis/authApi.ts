@@ -4,7 +4,7 @@ import {
   TokensState,
   AccessToken,
 } from "../interfaces/authInterfaces";
-import { logOut, setCredentials } from "../slices/authSlice";
+import { logOut, setCredentials } from "../.";
 import { baseApi } from "./baseApi";
 
 const authApi = baseApi.injectEndpoints({
@@ -20,7 +20,6 @@ const authApi = baseApi.injectEndpoints({
           const { data } = await queryFulfilled;
           dispatch(setCredentials({tokens: data}));
         } catch (error: unknown) {
-          console.log(error)
         }
       },
     }),
@@ -42,7 +41,6 @@ const authApi = baseApi.injectEndpoints({
           await queryFulfilled;
           dispatch(logOut());
         } catch (error) {
-          console.log(error)
         }
       },
     }),
