@@ -1,25 +1,28 @@
 import { Navigate } from "react-router-dom";
 import { useUserInfo } from "../store";
 import isAuthorized from "./utils/isAuthorized";
+import RequireAtLeastOne from "./utils/requireAtLeastOne";
 
 interface IProtectedRoute {
   children: React.ReactNode;
   redirectUrl?: string;
   requiredPermissions?: string[];
-  superuser?: boolean;
-  staff?: boolean;
+  requiredSuperUser?: boolean;
+  requiredStaff?: boolean;
 }
 
-const ProtectedRoute: React.FC<IProtectedRoute> = ({
+type ProtectedRouteProps = RequireAtLeastOne<IProtectedRoute, 'requiredPermissions' | 'requiredSuperUser' | 'requiredStaff'>;
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   redirectUrl = "/login",
   requiredPermissions = [],
-  superuser = false,
-  staff = false,
+  requiredSuperUser = false,
+  requiredStaff = false,
 }) => {
   const userInfo = useUserInfo();
 
-  return isAuthorized(userInfo, requiredPermissions, superuser, staff) ? <>{children}</> : <Navigate to={redirectUrl} />;
+  return isAuthorized(userInfo, requiredPermissions, requiredSuperUser, requiredStaff) ? <>{children}</> : <Navigate to={redirectUrl} />;
 };
 
 export default ProtectedRoute;

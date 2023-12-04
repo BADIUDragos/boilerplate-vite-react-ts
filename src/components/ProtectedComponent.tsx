@@ -1,5 +1,6 @@
 import { useUserInfo } from "../store";
 import isAuthorized from "./utils/isAuthorized";
+import RequireAtLeastOne from "./utils/requireAtLeastOne";
 
 interface IProtectedComponent {
   children: React.ReactNode;
@@ -8,7 +9,9 @@ interface IProtectedComponent {
   requiredStaff?: boolean
 }
 
-const ProtectedComponent: React.FC<IProtectedComponent> = ({
+type ProtectedComponentProps = RequireAtLeastOne<IProtectedComponent, 'requiredPermissions' | 'requiredSuperUser' | 'requiredStaff'>;
+
+const ProtectedComponent: React.FC<ProtectedComponentProps> = ({
   children,
   requiredPermissions = [],
   requiredSuperUser = false,
