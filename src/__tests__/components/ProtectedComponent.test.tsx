@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
-import { authStoreWithPreloadedState } from "../../__testUtils__/mockStores";
+import { authStoreWithPreloadedState } from "../../__testUtils__/testStores";
 import { AuthState } from "../../store/interfaces/authInterfaces";
 import ProtectedComponent from "../../components/ProtectedComponent";
 

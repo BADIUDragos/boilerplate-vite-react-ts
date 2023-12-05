@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { AuthState } from "../../store/interfaces/authInterfaces";
 import ProtectedRoute from "../../components/ProtectedRoute";
-import { authStoreWithPreloadedState } from "../../__testUtils__/mockStores";
+import { authStoreWithPreloadedState } from "../../__testUtils__/testStores";
 
 import "@testing-library/jest-dom/vitest";
 
