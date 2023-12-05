@@ -9,11 +9,10 @@ import { authStoreWithPreloadedState } from "../../__testUtils__/mockStores";
 import "@testing-library/jest-dom/vitest";
 
 describe("ProtectedRoute", () => {
-  const required = "default_test_filler_for_at_least_one_required";
 
   const setup = (
     authState: AuthState,
-    requiredPermissions: string[] = [required],
+    requiredPermissions: string[] = [],
     requiredSuperUser: boolean = false,
     requiredStaff: boolean = false,
     redirectUrl: string = "/login"
