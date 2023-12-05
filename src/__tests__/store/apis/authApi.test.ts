@@ -32,7 +32,7 @@ afterAll(() => server.close());
 describe("Login User", () => {
   const tokenBody: TokensState = {
     access:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ1c2VyIiwicGVybWlzc2lvbnMiOlsidmlld19jb250ZW50Il0sImVtYWlsIjoidXNlckByb2xscy1yb3ljZS5jb20iLCJpc1N1cGVydXNlciI6ZmFsc2UsImlzU3RhZmYiOmZhbHNlfQ.KYuB30UYnXLXEpbMDRBjOYnPpbSjWabjAJtCNWt288A",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ1c2VyIiwiZW1haWwiOiJ1c2VyQHJvbGxzLXJveWNlLmNvbSIsInBlcm1pc3Npb25zIjpbInZpZXdfY29udGVudCJdLCJpc1N1cGVydXNlciI6ZmFsc2UsImlzU3RhZmYiOmZhbHNlfQ.Xw1uPDh6gBTu34bgsjwAi5F8ahBpbEbMDev33hCoOzE",
     refresh: "refresh",
   };
 
