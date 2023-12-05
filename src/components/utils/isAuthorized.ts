@@ -12,7 +12,10 @@ const isAuthorized = (
   if (userInfo?.isSuperuser) {
     isAuthorized = true
   } else if (requiredStaff && userInfo?.isStaff && requiredSuperUser === false) {
-    isAuthorized = true
+
+    isAuthorized = requiredPermissions.every((permission: string) =>
+        userInfo?.permissions?.includes(permission)
+      )
   } else {
     isAuthorized = requiredPermissions.every((permission: string) =>
         userInfo?.permissions?.includes(permission)

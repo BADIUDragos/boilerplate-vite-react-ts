@@ -11,7 +11,10 @@ interface IProtectedRoute {
   requiredStaff?: boolean;
 }
 
-type ProtectedRouteProps = RequireAtLeastOne<IProtectedRoute, 'requiredPermissions' | 'requiredSuperUser' | 'requiredStaff'>;
+type ProtectedRouteProps = RequireAtLeastOne<
+  IProtectedRoute,
+  "requiredPermissions" | "requiredSuperUser" | "requiredStaff"
+>;
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
@@ -22,7 +25,16 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 }) => {
   const userInfo = useUserInfo();
 
-  return isAuthorized(userInfo, requiredPermissions, requiredSuperUser, requiredStaff) ? <>{children}</> : <Navigate to={redirectUrl} />;
+  return isAuthorized(
+    userInfo,
+    requiredPermissions,
+    requiredSuperUser,
+    requiredStaff
+  ) ? (
+    <>{children}</>
+  ) : (
+    <Navigate to={redirectUrl} />
+  );
 };
 
 export default ProtectedRoute;
