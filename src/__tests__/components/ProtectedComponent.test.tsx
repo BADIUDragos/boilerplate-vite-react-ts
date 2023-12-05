@@ -9,7 +9,10 @@ import "@testing-library/jest-dom/vitest";
 
 
 describe("ProtectedComponent", () => {
-  const setup = (authState: AuthState, requiredPermissions?: string[], requiredSuperUser?: boolean, requiredStaff?: boolean) => {
+
+  const required = 'filler_for_at_least_one_required'
+
+  const setup = (authState: AuthState, requiredPermissions: string[] = [required], requiredSuperUser?: boolean, requiredStaff?: boolean) => {
     const store = authStoreWithPreloadedState({ auth: authState });
     render(
       <Provider store={store}>
@@ -34,7 +37,7 @@ describe("ProtectedComponent", () => {
           isStaff: false
         },
       },
-      ["view_content"], true, false
+      ["view_content"], false, false
     );
 
     screen.debug()
