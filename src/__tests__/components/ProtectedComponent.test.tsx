@@ -10,7 +10,7 @@ import "@testing-library/jest-dom/vitest";
 
 describe("ProtectedComponent", () => {
 
-  const required = 'filler_for_at_least_one_required'
+  const required = 'default_test_filler_for_at_least_one_required'
 
   const setup = (authState: AuthState, requiredPermissions: string[] = [required], requiredSuperUser?: boolean, requiredStaff?: boolean) => {
     const store = authStoreWithPreloadedState({ auth: authState });
