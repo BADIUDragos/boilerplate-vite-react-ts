@@ -8,7 +8,8 @@ import {
   UserInfoState,
 } from "../../../store/interfaces/authInterfaces";
 import { vi, describe, it, expect } from "vitest";
-// import { decodeToken } from "../../../functions/decoding";
+import { decodeToken } from "../../../functions/decoding";
+import { createUserInfoState } from "../../../__testUtils__/sliceSetups/auth";
 
 const mock_access_token =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ1c2VyIiwicGVybWlzc2lvbnMiOlsidmlld19jb250ZW50Il0sImVtYWlsIjoidXNlckByb2xscy1yb3ljZS5jb20iLCJpc1N1cGVydXNlciI6ZmFsc2UsImlzU3RhZmYiOmZhbHNlfQ.KYuB30UYnXLXEpbMDRBjOYnPpbSjWabjAJtCNWt288A";
@@ -41,41 +42,29 @@ vi.mock("../../../functions/decoding", () => ({
   }),
 }));
 
-// describe("authSlice initialState", () => {
-//   it("initializes correctly based on localStorage and decode function", () => {
-//     vi.spyOn(Storage.prototype, "getItem").mockImplementation((key) => {
-//       if (key === "accessToken") return "mocked_access_token";
-//       if (key === "refreshToken") return "mocked_refresh_token";
-//       return null;
-//     });
+describe("authSlice initialState", () => {
+  it("initializes correctly based on localStorage and decode function", () => {
+    vi.spyOn(Storage.prototype, "getItem").mockImplementation((key) => {
+      if (key === "accessToken") return "mocked_access_token";
+      if (key === "refreshToken") return "mocked_refresh_token";
+      return null;
+    });
 
-//     vi.spyOn({ decodeToken }, "decodeToken").mockImplementation(() => ({
-//       id: 1,
-//       username: "user",
-//       permissions: ["view_content"],
-//       email: "user@rolls-royce.com",
-//       isSuperuser: false,
-//       isStaff: false,
-//     }));
+    const userInfo = createUserInfoState()
 
-//     const initialState = authReducer(undefined, { type: "@@INIT" });
+    vi.spyOn({ decodeToken }, "decodeToken").mockImplementation(() => (userInfo));
 
-//     expect(initialState.tokens).toEqual({
-//       access: "mocked_access_token",
-//       refresh: "mocked_refresh_token",
-//     });
-//     expect(initialState.userInfo).toEqual({
-//       id: 1,
-//       username: "user",
-//       permissions: ["view_content"],
-//       email: "user@rolls-royce.com",
-//       isSuperuser: false,
-//       isStaff: false,
-//     });
+    const initialState = authReducer(undefined, { type: "@@INIT" });
 
-//     vi.restoreAllMocks();
-//   });
-// });
+    expect(initialState.tokens).toEqual({
+      access: "mocked_access_token",
+      refresh: "mocked_refresh_token",
+    });
+    expect(initialState.userInfo).toEqual(userInfo);
+
+    vi.restoreAllMocks();
+  });
+});
 
 describe("authSlice basic functionalities", () => {
   it("should handle setCredentials and setItem to localstorage", () => {
