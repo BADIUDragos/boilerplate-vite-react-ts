@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll, afterEach, afterAll } from "vitest";
 
-import { createAuthState, createTokensState, createUserInfoState, getWrapper } from "../../../__testUtils__/functions";
+import { getWrapper } from "../../../__testUtils__/functions";
 import {
   authStoreWithPreloadedState,
   renderWithProviders,
@@ -26,6 +26,7 @@ import { act } from "react-dom/test-utils";
 import { renderHook, waitFor } from "@testing-library/react";
 
 import { authApiHandler } from "../../../__testUtils__/handlers";
+import { createAuthState, createTokensState, createUserInfoState, loggedOutState } from "../../../__testUtils__/sliceTestSetups/auth";
 
 const server = setupServer(...authApiHandler);
 
@@ -49,7 +50,7 @@ describe("Login User", () => {
     };
 
     const expectedAuthState: AuthState = createAuthState({
-      userInfo: createUserInfoState({ permissions: ["other_permissions"] }),
+      userInfo: createUserInfoState(),
       tokens: createTokensState({access: tokenBody.access, refresh: tokenBody.refresh})
     });
 
@@ -89,25 +90,15 @@ describe("Login User", () => {
   });
 
   it("runs the userLogoutMutation successfully", async () => {
+
     const preloadedState = {
-      auth: {
-        tokens: { access: tokenBody.access, refresh: tokenBody.refresh },
-        userInfo: {
-          id: 1,
-          username: "user",
-          email: "user@rolls-royce.com",
-          permissions: ["view_content"],
-          isSuperuser: false,
-          isStaff: false,
-        },
-      },
-    };
+      auth: createAuthState({
+        userInfo: createUserInfoState(),
+        tokens: createTokensState({access: tokenBody.access, refresh: tokenBody.refresh})
+    })};
 
     const expectedAuthState = {
-      auth: {
-        tokens: null,
-        userInfo: null,
-      },
+      auth: loggedOutState,
     };
 
     const { store } = renderWithProviders(<></>, {

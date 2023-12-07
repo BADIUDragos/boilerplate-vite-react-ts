@@ -8,15 +8,7 @@ import ProtectedRoute from "../../components/ProtectedRoute";
 import { renderWithProviders } from "../../__testUtils__/testStores";
 
 import "@testing-library/jest-dom/vitest";
-import {
-  createAuthState,
-  createUserInfoState,
-} from "../../__testUtils__/functions";
-
-const loggedOutState = {
-  tokens: null,
-  userInfo: null,
-};
+import { createAuthState, createUserInfoState, loggedOutState } from "../../__testUtils__/sliceTestSetups/auth";
 
 describe("ProtectedRoute", () => {
   const setup = (
@@ -77,6 +69,26 @@ describe("ProtectedRoute", () => {
     expect(screen.getByText("Protected Content")).toBeInTheDocument();
   });
 
+  it("doesn't render children if requiredSuperuser and user is not superUser", () => {
+    const state = createAuthState({
+      userInfo: createUserInfoState({ permissions: [] }),
+    });
+
+    setup({ auth: state }, [], true);
+
+    expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
+  });
+
+  it("doesn't render children if requiredSuperuser and user is just staff", () => {
+    const state = createAuthState({
+      userInfo: createUserInfoState({ isStaff: true }),
+    });
+
+    setup({ auth: state }, ["view_content"], true);
+
+    expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
+  });
+
   it("renders children for staff when requiredStaff and has all permissions", () => {
     const state = createAuthState({
       userInfo: createUserInfoState({ isStaff: true }),
@@ -87,7 +99,7 @@ describe("ProtectedRoute", () => {
     expect(screen.getByText("Protected Content")).toBeInTheDocument();
   });
 
-  it("doesn't renders children for staff when required staff and no permissions", () => {
+  it("doesn't render children for staff users if not all permissions", () => {
     const state = createAuthState({
       userInfo: createUserInfoState({ isStaff: true, permissions: [] }),
     });

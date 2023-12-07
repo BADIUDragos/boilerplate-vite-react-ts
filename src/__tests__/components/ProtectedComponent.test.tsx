@@ -1,23 +1,25 @@
 import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
-import { Provider } from "react-redux";
-import { authStoreWithPreloadedState } from "../../__testUtils__/testStores";
+import { screen } from "@testing-library/react";
 import { AuthState } from "../../store/interfaces/authInterfaces";
 import ProtectedComponent from "../../components/ProtectedComponent";
+import { renderWithProviders } from "../../__testUtils__/testStores";
 
 import "@testing-library/jest-dom/vitest";
+import {
+  createAuthState,
+  createUserInfoState,
+  loggedOutState,
+} from "../../__testUtils__/sliceTestSetups/auth";
 
 describe("ProtectedComponent", () => {
-
   const setup = (
-    authState: AuthState,
+    authState: { auth: AuthState },
     requiredPermissions: string[] = [],
     requiredSuperUser: boolean = false,
     requiredStaff: boolean = false
   ) => {
-    const store = authStoreWithPreloadedState({ auth: authState });
-    render(
-      <Provider store={store}>
+    renderWithProviders(
+      <>
         test
         <ProtectedComponent
           requiredPermissions={requiredPermissions}
@@ -26,27 +28,15 @@ describe("ProtectedComponent", () => {
         >
           <div>Protected Content</div>
         </ProtectedComponent>
-      </Provider>
+      </>,
+      { preloadedState: authState }
     );
   };
 
   it("renders children for authorized users", () => {
-    setup(
-      {
-        tokens: { access: "mock_access_token", refresh: "mock_refresh_token" },
-        userInfo: {
-          id: 1,
-          username: "user",
-          email: "user@rolls-royce.com",
-          permissions: ["view_content"],
-          isSuperuser: false,
-          isStaff: false,
-        },
-      },
-      ["view_content"],
-      false,
-      false
-    );
+    const state = createAuthState();
+
+    setup({ auth: state }, ["view_content"]), ["view_content"];
 
     screen.debug();
     expect(screen.getByText("test")).toBeInTheDocument();
@@ -54,133 +44,93 @@ describe("ProtectedComponent", () => {
   });
 
   it("does not render children for unauthorized users", () => {
-    setup(
-      {
-        tokens: { access: "mock_access_token", refresh: "mock_refresh_token" },
-        userInfo: {
-          id: 1,
-          username: "user",
-          email: "user@rolls-royce.com",
-          permissions: ["other_permission"],
-          isSuperuser: false,
-          isStaff: false,
-        },
-      },
-      ["view_content"]
-    );
+    const state = createAuthState({
+      userInfo: createUserInfoState({ permissions: ["other_permissions"] }),
+    });
+
+    setup({ auth: state }, ["view_content"]);
 
     expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
   });
 
   it("renders children for superuser users regardless of permissions", () => {
-    setup(
-      {
-        tokens: { access: "mock_access_token", refresh: "mock_refresh_token" },
-        userInfo: {
-          id: 1,
-          username: "staff",
-          email: "user@rolls-royce.com",
-          permissions: [],
-          isSuperuser: true,
-          isStaff: true,
-        },
-      },
-      ["view_content"]
-    );
+    const state = createAuthState({
+      userInfo: createUserInfoState({ isSuperuser: true, permissions: [] }),
+    });
+
+    setup({ auth: state }, ["view_content"]);
 
     expect(screen.getByText("Protected Content")).toBeInTheDocument();
   });
 
   it("doesn't render children if requiredSuperuser and user is not superUser", () => {
-    setup(
-      {
-        tokens: { access: "mock_access_token", refresh: "mock_refresh_token" },
-        userInfo: {
-          id: 1,
-          username: "user",
-          email: "user@rolls-royce.com",
-          permissions: ["view_content"],
-          isSuperuser: false,
-          isStaff: false,
-        },
-      },
-      ["view_content"],
-      true
-    );
+    const state = createAuthState({
+      userInfo: createUserInfoState({ permissions: [] }),
+    });
 
-    expect(screen.queryByText('Protected Content')).not.toBeInTheDocument();
+    setup({ auth: state }, [], true);
+
+    expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
   });
 
   it("doesn't render children if requiredSuperuser and user is just staff", () => {
-    setup(
-      {
-        tokens: { access: "mock_access_token", refresh: "mock_refresh_token" },
-        userInfo: {
-          id: 1,
-          username: "staff",
-          email: "user@rolls-royce.com",
-          permissions: [],
-          isSuperuser: false,
-          isStaff: true,
-        },
-      },
-      ["view_content"],
-      true
-    );
+    const state = createAuthState({
+      userInfo: createUserInfoState({ isStaff: true }),
+    });
 
-    expect(screen.queryByText('Protected Content')).not.toBeInTheDocument();
+    setup({ auth: state }, ["view_content"], true);
+
+    expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
   });
 
-  it("renders children for staff users when requiredStaff if all permissions", () => {
-    setup(
-      {
-        tokens: { access: "mock_access_token", refresh: "mock_refresh_token" },
-        userInfo: {
-          id: 1,
-          username: "staff",
-          email: "user@rolls-royce.com",
-          permissions: ["view_content"],
-          isSuperuser: false,
-          isStaff: true,
-        },
-      },
-      ["view_content"],
-      false,
-      true
-    );
+  it("renders children for staff users when requiredStaff and has all permissions", () => {
+    const state = createAuthState({
+      userInfo: createUserInfoState({ isStaff: true }),
+    });
+
+    setup({ auth: state }, ["view_content"], false, true);
 
     expect(screen.getByText("Protected Content")).toBeInTheDocument();
   });
 
   it("doesn't render children for staff users if not all permissions", async () => {
-    setup(
-      {
-        tokens: { access: "mock_access_token", refresh: "mock_refresh_token" },
-        userInfo: {
-          id: 1,
-          username: "staff",
-          email: "user@rolls-royce.com",
-          permissions: [],
-          isSuperuser: false,
-          isStaff: true,
-        },
-      },
-      ["view_content"],
-      false,
-      true
-    );
+    const state = createAuthState({
+      userInfo: createUserInfoState({ isStaff: true, permissions: [] }),
+    });
 
-    expect(screen.queryByText('Protected Content')).not.toBeInTheDocument();
+    setup({ auth: state }, ["view_content"], false, true);
+
+    expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
   });
 
-  it("renders children when nothing is required and user is not logged in", () => {
-    setup(
-      {
-        tokens: null,
-        userInfo: null,
-      },
-      []
-    );
+  it("doesn't render children if requiredSuperUser and user is not superUser", () => {
+    const state = createAuthState();
+
+    setup({ auth: state }, ["view_content"], true, false);
+
+    expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
+  });
+
+  it("doesn't render children if requiredSuperUser and user is just staff", () => {
+    const state = createAuthState({
+      userInfo: createUserInfoState({ isStaff: true }),
+    });
+
+    setup({ auth: state }, ["view_content"], true, false);
+
+    expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
+  });
+
+  it("doesn't render children if requiredStaff and user is not staff", () => {
+    const state = createAuthState();
+
+    setup({ auth: state }, ["view_content"], false, true);
+
+    expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
+  });
+
+  it("renders children when login is not required and user is not logged in", () => {
+    setup({ auth: loggedOutState }, [], false);
 
     expect(screen.getByText("Protected Content")).toBeInTheDocument();
   });
