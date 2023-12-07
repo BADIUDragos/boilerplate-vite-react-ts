@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll, afterEach, afterAll } from "vitest";
 
-import { getWrapper } from "../../../__testUtils__/functions";
+import { createAuthState, createTokensState, createUserInfoState, getWrapper } from "../../../__testUtils__/functions";
 import {
   authStoreWithPreloadedState,
   renderWithProviders,
@@ -48,17 +48,10 @@ describe("Login User", () => {
       userInfo: null,
     };
 
-    const expectedAuthState: AuthState = {
-      tokens: { access: tokenBody.access, refresh: tokenBody.refresh },
-      userInfo: {
-        id: 1,
-        username: "user",
-        email: "user@rolls-royce.com",
-        permissions: ["view_content"],
-        isSuperuser: false,
-        isStaff: false,
-      },
-    };
+    const expectedAuthState: AuthState = createAuthState({
+      userInfo: createUserInfoState({ permissions: ["other_permissions"] }),
+      tokens: createTokensState({access: tokenBody.access, refresh: tokenBody.refresh})
+    });
 
     const store = authStoreWithPreloadedState();
     const wrapper = getWrapper(store);
