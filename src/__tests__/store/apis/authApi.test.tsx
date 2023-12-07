@@ -26,7 +26,8 @@ import { act } from "react-dom/test-utils";
 import { renderHook, waitFor } from "@testing-library/react";
 
 import { authApiHandler } from "../../../__testUtils__/handlers";
-import { createAuthState, createTokensState, createUserInfoState, loggedOutState } from "../../../__testUtils__/sliceTestSetups/auth";
+import { createAuthState, createTokensState, createUserInfoState, loggedOutState } from "../../../__testUtils__/sliceSetups/auth";
+
 
 const server = setupServer(...authApiHandler);
 

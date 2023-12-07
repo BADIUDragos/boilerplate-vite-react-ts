@@ -9,7 +9,7 @@ import {
   createAuthState,
   createUserInfoState,
   loggedOutState,
-} from "../../__testUtils__/sliceTestSetups/auth";
+} from "../../__testUtils__/sliceSetups/auth";
 
 describe("ProtectedComponent", () => {
   const setup = (
