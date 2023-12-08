@@ -7,7 +7,7 @@ import { useAuth } from './hooks/authSliceHooks'
 import { logOut, setCredentials, AuthSlice } from './slices/authSlice';
 import { baseApi } from './apis/baseApi';
 
-export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
+const setupStore = (preloadedState?: PreloadedState<RootState>) => {
   return configureStore({
     reducer: rootReducer,
     preloadedState,
@@ -16,7 +16,6 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
     devTools: true,
   });
 }
-
 
 setupListeners(setupStore().dispatch);
 
@@ -35,3 +34,5 @@ export { useLoginMutation, useLogoutMutation };
 
 //selectors
 export { useAuth }
+
+export default setupStore
