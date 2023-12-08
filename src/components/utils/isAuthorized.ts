@@ -7,22 +7,19 @@ const isAuthorized = (
   requiredStaff?: boolean,
 ): boolean => {
   
-  let isAuthorized = false;
 
-  if (userInfo?.isSuperuser) {
-    isAuthorized = true
-  } else if (requiredStaff && userInfo?.isStaff && requiredSuperUser === false) {
+  if (!userInfo) return false
 
-    isAuthorized = requiredPermissions.every((permission: string) =>
-        userInfo?.permissions?.includes(permission)
-      )
-  } else {
-    isAuthorized = requiredPermissions.every((permission: string) =>
-        userInfo?.permissions?.includes(permission)
-      ) && requiredStaff === false && requiredSuperUser === false;
+  if (userInfo.isSuperuser) return true
+
+  if (requiredStaff && !userInfo.isStaff) return false;
+
+  if (!requiredSuperUser) {
+    return requiredPermissions.every(permission => userInfo.permissions?.includes(permission));
   }
 
-  return isAuthorized;
+  return false;
+
 };
 
 export default isAuthorized;

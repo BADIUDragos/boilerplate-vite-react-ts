@@ -1,6 +1,6 @@
 import { Navbar, Container, Nav } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { useLogoutMutation, useTokens, useUserInfo } from "../store";
+import { useAuth, useLogoutMutation } from "../store";
 import { useEffect } from "react";
 
 interface IHeader {
@@ -9,10 +9,9 @@ interface IHeader {
 
 const Header: React.FC<IHeader> = ({ className }) => {
   const navigate = useNavigate();
-  const tokens = useTokens()
-  const userInfo = useUserInfo()
+  const { tokens, userInfo } = useAuth()
 
-  const [logout, {isSuccess}] = useLogoutMutation();
+  const [logout] = useLogoutMutation();
 
   const handleLogout = async () => {
     if (tokens?.refresh) {
@@ -21,10 +20,10 @@ const Header: React.FC<IHeader> = ({ className }) => {
   };
 
   useEffect(() => {
-    if(isSuccess){
+    if(userInfo){
       navigate("/");
     }
-  }, [isSuccess])
+  }, [userInfo])
 
   return (
     <header className={className}>

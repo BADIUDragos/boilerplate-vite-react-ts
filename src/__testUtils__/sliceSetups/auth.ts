@@ -5,6 +5,12 @@ export const loggedOutState = {
   userInfo: null,
 };
 
+export const tokenBody: TokensState = {
+  access:
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ1c2VyIiwicGVybWlzc2lvbnMiOlsidmlld19jb250ZW50Il0sImVtYWlsIjoidXNlckByb2xscy1yb3ljZS5jb20iLCJpc1N1cGVydXNlciI6ZmFsc2UsImlzU3RhZmYiOmZhbHNlfQ.w5IlmWh_ED29v5dKTyVxlsMTCl8r0DymmJsjUsYahx4",
+  refresh: "mock_refresh_token",
+};
+
 export const createUserInfoState = (overrides: Partial<UserInfoState> = {}): UserInfoState => {
   const defaultUserInfo: UserInfoState = {
     id: 1,

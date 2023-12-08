@@ -1,4 +1,4 @@
-import { useUserInfo } from "../store";
+import { useAuth } from "../store";
 import isAuthorized from "./utils/isAuthorized";
 import RequireAtLeastOne from "./utils/requireAtLeastOne";
 
@@ -18,7 +18,7 @@ const ProtectedComponent: React.FC<ProtectedComponentProps> = ({
   requiredStaff = false
 }) => {
   
-  const userInfo = useUserInfo()
+  const { userInfo } = useAuth()
 
   return isAuthorized(userInfo, requiredPermissions, requiredSuperUser, requiredStaff) ? <>{children}</> : null;
 };

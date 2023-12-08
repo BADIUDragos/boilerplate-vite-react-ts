@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import FormContainer from "../components/FormContainer";
 
-import { useLoginMutation, useUserInfo } from "../store";
+import { useLoginMutation, useAuth } from "../store";
 import Loader from "../components/Loader";
 import { useNavigate } from "react-router-dom";
 import getErrorString from "../store/errorHandling/getErrorString";
@@ -10,7 +10,7 @@ import getErrorString from "../store/errorHandling/getErrorString";
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const userInfo = useUserInfo();
+  const { userInfo } = useAuth();
 
   const [triggerLogin, { isLoading, error }] = useLoginMutation();
 

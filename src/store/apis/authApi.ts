@@ -2,7 +2,6 @@ import {
   RefreshToken,
   LoginCredentials,
   TokensState,
-  AccessToken,
 } from "../interfaces/authInterfaces";
 import { logOut, setCredentials } from "../.";
 import { baseApi } from "./baseApi";
@@ -19,16 +18,8 @@ const authApi = baseApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
           dispatch(setCredentials({tokens: data}));
-        } catch (error: unknown) {
-        }
+        } catch (error: unknown) { /* empty */ }
       },
-    }),
-    validate: build.query<TokensState, AccessToken>({
-      query: (accessToken) => ({
-        url: "/auth/validate",
-        method: "GET",
-        body: accessToken,
-      }),
     }),
     logout: build.mutation<null, RefreshToken>({
       query: (refresh) => ({
@@ -41,11 +32,12 @@ const authApi = baseApi.injectEndpoints({
           await queryFulfilled;
           dispatch(logOut());
         } catch (error) {
+          dispatch(logOut());
         }
       },
     }),
   }),
 });
 
-export const { useLoginMutation, useValidateQuery,  useLogoutMutation } = authApi;
+export const { useLoginMutation,  useLogoutMutation } = authApi;
 export { authApi };

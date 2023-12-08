@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterEach, afterAll } from "vitest";
+import { describe, it, expect } from "vitest";
 
 import { getWrapper } from "../../../__testUtils__/functions";
 import {
@@ -10,12 +10,10 @@ import {
   useLoginMutation,
   useLogoutMutation,
 } from "../../../store/apis/authApi";
-import { setupServer } from "msw/node";
 
 import {
   AuthState,
   LoginCredentials,
-  TokensState,
 } from "../../../store/interfaces/authInterfaces";
 import {
   fulfilledMutation,
@@ -25,34 +23,23 @@ import {
 import { act } from "react-dom/test-utils";
 import { renderHook, waitFor } from "@testing-library/react";
 
-import { authApiHandler } from "../../../__testUtils__/handlers";
-import { createAuthState, createTokensState, createUserInfoState, loggedOutState } from "../../../__testUtils__/sliceSetups/auth";
+import { authApiHandler } from "../../../__testUtils__/authApiHandlers";
+import { createAuthState, createTokensState, createUserInfoState, loggedOutState, tokenBody } from "../../../__testUtils__/sliceSetups/auth";
+import { initializeTestServer } from "../../../__testUtils__/testServerSetup";
 
 
-const server = setupServer(...authApiHandler);
-
-beforeAll(() => server.listen());
-
-afterEach(() => server.resetHandlers());
-
-afterAll(() => server.close());
-
-export const tokenBody: TokensState = {
-  access:
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ1c2VyIiwicGVybWlzc2lvbnMiOlsidmlld19jb250ZW50Il0sImVtYWlsIjoidXNlckByb2xscy1yb3ljZS5jb20iLCJpc1N1cGVydXNlciI6ZmFsc2UsImlzU3RhZmYiOmZhbHNlfQ.w5IlmWh_ED29v5dKTyVxlsMTCl8r0DymmJsjUsYahx4",
-  refresh: "mock_refresh_token",
-};
+initializeTestServer(authApiHandler);
 
 describe("Login User", () => {
   it("runs the userLoginMutation successfully", async () => {
     const preloadedState: AuthState = {
-      tokens: { access: "", refresh: "" },
+      tokens: null,
       userInfo: null,
     };
 
     const expectedAuthState: AuthState = createAuthState({
       userInfo: createUserInfoState(),
-      tokens: createTokensState({access: tokenBody.access, refresh: tokenBody.refresh})
+      tokens: createTokensState({access: tokenBody.access})
     });
 
     const store = authStoreWithPreloadedState();
@@ -95,16 +82,14 @@ describe("Login User", () => {
     const preloadedState = {
       auth: createAuthState({
         userInfo: createUserInfoState(),
-        tokens: createTokensState({access: tokenBody.access, refresh: tokenBody.refresh})
+        tokens: createTokensState({access: tokenBody.access})
     })};
 
     const expectedAuthState = {
       auth: loggedOutState,
     };
 
-    const { store } = renderWithProviders(<></>, {
-      preloadedState: preloadedState,
-    });
+    const store = authStoreWithPreloadedState();
     const wrapper = getWrapper(store);
 
     const { result } = renderHook(() => useLogoutMutation(undefined), {

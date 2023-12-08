@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { useUserInfo } from "../store";
+import { useAuth } from "../store";
 import isAuthorized from "./utils/isAuthorized";
 import RequireAtLeastOne from "./utils/requireAtLeastOne";
 
@@ -23,7 +23,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   requiredSuperUser = false,
   requiredStaff = false,
 }) => {
-  const userInfo = useUserInfo();
+  const { userInfo } = useAuth();
 
   return isAuthorized(
     userInfo,

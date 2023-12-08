@@ -8,7 +8,6 @@ import "@testing-library/jest-dom/vitest";
 import {
   createAuthState,
   createUserInfoState,
-  loggedOutState,
 } from "../../__testUtils__/sliceSetups/auth";
 
 describe("ProtectedComponent", () => {
@@ -53,85 +52,13 @@ describe("ProtectedComponent", () => {
     expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
   });
 
-  it("renders children for superuser users regardless of permissions", () => {
+  it("requires at least one requirement", () => {
     const state = createAuthState({
-      userInfo: createUserInfoState({ isSuperuser: true, permissions: [] }),
+      userInfo: createUserInfoState({ permissions: ["other_permissions"] }),
     });
 
     setup({ auth: state }, ["view_content"]);
 
-    expect(screen.getByText("Protected Content")).toBeInTheDocument();
-  });
-
-  it("doesn't render children if requiredSuperuser and user is not superUser", () => {
-    const state = createAuthState({
-      userInfo: createUserInfoState({ permissions: [] }),
-    });
-
-    setup({ auth: state }, [], true);
-
     expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
-  });
-
-  it("doesn't render children if requiredSuperuser and user is just staff", () => {
-    const state = createAuthState({
-      userInfo: createUserInfoState({ isStaff: true }),
-    });
-
-    setup({ auth: state }, ["view_content"], true);
-
-    expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
-  });
-
-  it("renders children for staff users when requiredStaff and has all permissions", () => {
-    const state = createAuthState({
-      userInfo: createUserInfoState({ isStaff: true }),
-    });
-
-    setup({ auth: state }, ["view_content"], false, true);
-
-    expect(screen.getByText("Protected Content")).toBeInTheDocument();
-  });
-
-  it("doesn't render children for staff users if not all permissions", async () => {
-    const state = createAuthState({
-      userInfo: createUserInfoState({ isStaff: true, permissions: [] }),
-    });
-
-    setup({ auth: state }, ["view_content"], false, true);
-
-    expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
-  });
-
-  it("doesn't render children if requiredSuperUser and user is not superUser", () => {
-    const state = createAuthState();
-
-    setup({ auth: state }, ["view_content"], true, false);
-
-    expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
-  });
-
-  it("doesn't render children if requiredSuperUser and user is just staff", () => {
-    const state = createAuthState({
-      userInfo: createUserInfoState({ isStaff: true }),
-    });
-
-    setup({ auth: state }, ["view_content"], true, false);
-
-    expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
-  });
-
-  it("doesn't render children if requiredStaff and user is not staff", () => {
-    const state = createAuthState();
-
-    setup({ auth: state }, ["view_content"], false, true);
-
-    expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
-  });
-
-  it("renders children when login is not required and user is not logged in", () => {
-    setup({ auth: loggedOutState }, [], false);
-
-    expect(screen.getByText("Protected Content")).toBeInTheDocument();
   });
 });

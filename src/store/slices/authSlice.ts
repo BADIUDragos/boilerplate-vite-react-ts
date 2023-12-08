@@ -2,14 +2,20 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AuthState, TokensState } from "../interfaces/authInterfaces";
 import { decodeToken } from "../../functions/decoding";
 
-const tokensInitialState: TokensState = {
-  access: localStorage.getItem("accessToken") || "",
-  refresh: localStorage.getItem("refreshToken") || "",
+const getTokensFromLocalStorage = () => {
+  const tokensObject = localStorage.getItem("objectToken");
+  return tokensObject ? JSON.parse(tokensObject) : null;
+};
+
+const getUserInfoFromAccessToken = () => {
+  const tokens = getTokensFromLocalStorage()
+  if (tokens.access) return decodeToken(tokens.access)
+  return null
 }
 
 const initialState: AuthState = {
-  tokens: tokensInitialState || null,
-  userInfo: tokensInitialState.access ? decodeToken(tokensInitialState.access) : null,
+  tokens: getTokensFromLocalStorage(),
+  userInfo: getUserInfoFromAccessToken(),
 };
 
 const authSlice = createSlice({
@@ -23,15 +29,15 @@ const authSlice = createSlice({
       }>
     ) {
       state.tokens = action.payload.tokens;
-      state.userInfo = decodeToken(state.tokens.access)
-      localStorage.setItem("accessToken", state.tokens.access);
-      localStorage.setItem("refreshToken", state.tokens.refresh);
+      state.userInfo = decodeToken(state.tokens.access) 
+
+      localStorage.setItem("objectToken", JSON.stringify({'access' : state.tokens.access, 'refresh' : state.tokens.refresh}));
+
     },
     logOut(state) {
       state.tokens = null;
       state.userInfo = null;
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("objectToken");
     },
   },
 });

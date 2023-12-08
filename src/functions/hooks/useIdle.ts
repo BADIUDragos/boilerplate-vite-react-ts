@@ -1,27 +1,27 @@
-import Idle from "idle-js"
+import Idle from "idle-js";
 
-import { useLogoutMutation, useTokens } from "../../store";
+import { useLogoutMutation, useAuth } from "../../store";
 import { useEffect } from "react";
 
-export const useIdle = (milliseconds: number = 900000) : void => {
+export const useIdle = (milliseconds: number = 900000): void => {
   const [logout] = useLogoutMutation();
-  const tokens = useTokens();
+  const { tokens } = useAuth();
 
   useEffect(() => {
     if (tokens) {
       const idle = new Idle({
-        idle: milliseconds, 
+        idle: milliseconds,
         onIdle: () => {
           logout({ refresh: tokens.refresh });
         },
-        events: ['mousemove', 'keydown', 'mousedown'], 
+        events: ["mousemove", "keydown", "mousedown"],
       });
 
-      idle.start(); 
+      idle.start();
 
       return () => {
         idle.stop();
       };
     }
-  }, [logout, tokens, milliseconds]); 
-}
+  }, [logout, tokens, milliseconds]);
+};
