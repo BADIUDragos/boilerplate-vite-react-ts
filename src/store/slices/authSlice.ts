@@ -9,7 +9,7 @@ const getTokensFromLocalStorage = () => {
 
 const getUserInfoFromAccessToken = () => {
   const tokens = getTokensFromLocalStorage()
-  if (tokens.access) return decodeToken(tokens.access)
+  if (tokens && tokens.access) return decodeToken(tokens.access)
   return null
 }
 
