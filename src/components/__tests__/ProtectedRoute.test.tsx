@@ -4,7 +4,7 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import {
   AuthState
 } from "../../store/interfaces/authInterfaces";
-import ProtectedRoute from "../../components/ProtectedRoute";
+import ProtectedRoute from "../ProtectedRoute";
 import { renderWithProviders } from "../../__testUtils__/testStores";
 
 import "@testing-library/jest-dom/vitest";

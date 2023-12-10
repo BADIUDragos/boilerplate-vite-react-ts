@@ -2,7 +2,7 @@ import { PreloadedState, combineReducers, configureStore } from "@reduxjs/toolki
 import authReducer from "../store/slices/authSlice";
 import { baseApi } from "../store/apis/baseApi";
 import { authApi } from "../store/apis/authApi"
-import { AppStore, RootState, setupStore } from "../store";
+import setupStore, { AppStore, RootState } from "../store";
 import { RenderOptions, render } from "@testing-library/react";
 import { Provider } from "react-redux";
 import React, { PropsWithChildren } from 'react'

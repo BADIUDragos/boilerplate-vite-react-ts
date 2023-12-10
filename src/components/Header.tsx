@@ -44,12 +44,12 @@ const Header: React.FC<IHeader> = ({ className }) => {
               <Navbar.Text className="ml-3">
                 Hi {userInfo.username} !
               </Navbar.Text>
-              <Navbar.Text
+              <Nav.Link
                 className="ml-3 cursor-pointer"
                 onClick={handleLogout}
               >
                 Logout
-              </Navbar.Text>
+              </Nav.Link>
             </>
           ) : (
             <Nav.Link href="/login">

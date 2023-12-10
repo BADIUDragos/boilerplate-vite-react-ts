@@ -3,7 +3,6 @@ import { describe, it, expect } from "vitest";
 import { getWrapper } from "../../../__testUtils__/functions";
 import {
   authStoreWithPreloadedState,
-  renderWithProviders,
 } from "../../../__testUtils__/testStores";
 
 import {
@@ -89,7 +88,7 @@ describe("Login User", () => {
       auth: loggedOutState,
     };
 
-    const store = authStoreWithPreloadedState();
+    const store = authStoreWithPreloadedState(preloadedState);
     const wrapper = getWrapper(store);
 
     const { result } = renderHook(() => useLogoutMutation(undefined), {

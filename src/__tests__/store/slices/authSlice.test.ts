@@ -68,7 +68,7 @@ describe("authSlice basic functionalities", () => {
 
     expect(localStorage.setItem).toHaveBeenCalledWith(
       "objectToken",
-      {'access': tokens.access, 'refresh': tokens.refresh}
+      JSON.stringify({'access': tokens.access, 'refresh': tokens.refresh})
     );
 
     vi.restoreAllMocks();

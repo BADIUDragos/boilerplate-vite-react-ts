@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import isAuthorized from '../../../components/utils/isAuthorized'; // Adjust the import path as necessary
+import isAuthorized from '../isAuthorized'; // Adjust the import path as necessary
 import { createUserInfoState } from '../../../__testUtils__/sliceSetups/auth';
 
 describe('isAuthorized', () => {
