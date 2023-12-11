@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AuthState, TokensState } from "../interfaces/authInterfaces";
-import { decodeToken } from "../../functions/decoding";
+import { decodeToken } from "../../functions/decodeToken";
 
 const getTokensFromLocalStorage = () => {
   const tokensObject = localStorage.getItem("objectToken");

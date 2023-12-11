@@ -3,7 +3,7 @@ type TokenError = {
   messages: { token_type: string }[];
 };
 
-const isTokenError = (error: unknown): error is TokenError => {
+export const isTokenError = (error: unknown): error is TokenError => {
   const TokenError = error as TokenError;
   if (TokenError.code && TokenError.messages && Array.isArray(TokenError.messages)) {
     return true

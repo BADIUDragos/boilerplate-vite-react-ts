@@ -52,9 +52,9 @@ const Header: React.FC<IHeader> = ({ className }) => {
               </Nav.Link>
             </>
           ) : (
-            <Nav.Link href="/login">
+            <Link to="/login" className="text-decoration-none">
               <Navbar.Text className="ml-3">Login</Navbar.Text>
-            </Nav.Link>
+            </Link>
           )}
         </Container>
       </Navbar>

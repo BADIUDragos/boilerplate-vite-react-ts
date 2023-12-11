@@ -1,6 +1,6 @@
 import Idle from "idle-js";
 
-import { useLogoutMutation, useAuth } from "../../store";
+import { useLogoutMutation, useAuth } from "../store";
 import { useEffect } from "react";
 
 export const useIdle = (milliseconds: number = 900000): void => {

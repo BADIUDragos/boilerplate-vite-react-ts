@@ -8,12 +8,12 @@ import {
 import {
   useLoginMutation,
   useLogoutMutation,
-} from "../../../store/apis/authApi";
+} from "../authApi";
 
 import {
   AuthState,
   LoginCredentials,
-} from "../../../store/interfaces/authInterfaces";
+} from "../../interfaces/authInterfaces";
 import {
   fulfilledMutation,
   pendingMutation,
@@ -22,7 +22,7 @@ import {
 import { act } from "react-dom/test-utils";
 import { renderHook, waitFor } from "@testing-library/react";
 
-import { authApiHandler } from "../../../__testUtils__/authApiHandlers";
+import { authApiHandler } from "../../../__testUtils__/mswHandlers/authApiHandlers";
 import { createAuthState, createTokensState, createUserInfoState, loggedOutState, tokenBody } from "../../../__testUtils__/sliceSetups/auth";
 import { initializeTestServer } from "../../../__testUtils__/testServerSetup";
 

@@ -1,10 +1,5 @@
-import HomePage from "../pages/HomePage";
-import LoginPage from "../pages/LoginPage";
-import Layout from "../pages/Layout";
-import ErrorPage from "../pages/ErrorPage";
-import NotFoundPage from "../pages/NotFoundPage";
+import { HomePage, LoginPage, Layout, ErrorPage, NotFoundPage } from "../pages"
 import { createBrowserRouter } from "react-router-dom";
-import ProtectedRoute from "../components/ProtectedRoute";
 
 const router = createBrowserRouter([
   {

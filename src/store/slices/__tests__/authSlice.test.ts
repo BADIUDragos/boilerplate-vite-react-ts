@@ -1,12 +1,12 @@
 import authReducer, {
   setCredentials,
   logOut,
-} from "../../../store/slices/authSlice";
+} from "../authSlice";
 import {
   AuthState,
   TokensState,
   UserInfoState,
-} from "../../../store/interfaces/authInterfaces";
+} from "../../interfaces/authInterfaces";
 import { vi, describe, it, expect } from "vitest";
 import { createTokensState, createUserInfoState, loggedOutState } from "../../../__testUtils__/sliceSetups/auth";
 // import { decodeToken } from "../../../functions/decoding";

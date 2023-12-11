@@ -1,6 +1,6 @@
 import { JwtPayload, jwtDecode } from "jwt-decode";
 
-interface CustomJwtPayload extends JwtPayload {
+export interface CustomJwtPayload extends JwtPayload {
   id: number;
   username: string;
   permissions: string[];

@@ -19,7 +19,6 @@ describe("ProtectedRoute", () => {
     redirectUrl: string = "/login"
   ) => {
     renderWithProviders(
-      <MemoryRouter initialEntries={["/protected"]}>
         <Routes>
           <Route
             path="/protected"
@@ -35,9 +34,9 @@ describe("ProtectedRoute", () => {
             }
           />
           <Route path="/login" element={<div>Login Page</div>} />
-        </Routes>
-      </MemoryRouter>,
-      { preloadedState: authState }
+        </Routes>,
+      { preloadedState: authState,
+        route: '/protected' },
     );
   };
 
