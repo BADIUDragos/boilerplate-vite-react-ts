@@ -54,11 +54,10 @@ describe("ProtectedComponent", () => {
   });
 
   it("does not render children for users that are't logged in", () => {
-
     setup({ auth: loggedOutState }, ["view_content"]);
 
     expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
-  })
+  });
 
   it("requires at least one requirement", () => {
     const state = createAuthState({
@@ -70,6 +69,13 @@ describe("ProtectedComponent", () => {
     expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
   });
 
-  it("does not render children for logged out users")
-
+  it("not too sure about this one", () => {
+    renderWithProviders(
+      // @ts-expect-error
+      <ProtectedComponent>
+        <div>Protected Content</div>
+      </ProtectedComponent>,
+      { preloadedState: {auth: createAuthState()} }
+    );
+  });
 });
