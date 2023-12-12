@@ -1,62 +1,58 @@
-import authReducer, {
-  setCredentials,
-  logOut,
-} from "../authSlice";
+import authReducer, { setCredentials, logOut, getUserInfoFromAccessToken, getTokensFromLocalStorage } from "../authSlice";
 import {
   AuthState,
   TokensState,
   UserInfoState,
 } from "../../interfaces/authInterfaces";
 import { vi, describe, it, expect } from "vitest";
-import { createTokensState, createUserInfoState, loggedOutState } from "../../../__testUtils__/sliceSetups/auth";
-// import { decodeToken } from "../../../functions/decoding";
-// import { createUserInfoState } from "../../../__testUtils__/sliceSetups/auth";
+import {
+  createTokensState,
+  createUserInfoState,
+  loggedOutState,
+  tokenBody,
+} from "../../../__testUtils__/sliceSetups/auth";
 
 const filledInitialState: AuthState = {
   tokens: createTokensState(),
   userInfo: createUserInfoState(),
 };
 
-vi.mock("../../../functions/decoding", () => ({
-  decodeToken: vi.fn().mockReturnValue({
-    id: 1,
-    username: 'user',
-    email: 'user@rolls-royce.com',
-    permissions: ['view_content'],
-    isSuperuser: false,
-    isStaff: false,
-  }),
-}));
+describe("getTokensFromLocalStorage function", () => {
+  it("should return ToeknsState when tokens are in localStorage", () => {
+    localStorage.setItem("objectToken", JSON.stringify({"access": tokenBody.access, "refresh": tokenBody.refresh }))
+    
+    expect(getTokensFromLocalStorage()).toStrictEqual(tokenBody)
 
-// describe("authSlice initialState", () => {
-//   it("initializes correctly based on localStorage and decode function", () => {
-//     vi.spyOn(Storage.prototype, "getItem").mockImplementation((key) => {
-//       if (key === "accessToken") return "mocked_access_token";
-//       if (key === "refreshToken") return "mocked_refresh_token";
-//       return null;
-//     });
+    localStorage.clear()
+  })
 
-//     const userInfo = createUserInfoState()
+  it("should return null when tokens are not in localStorage", () => {
+    expect(getTokensFromLocalStorage()).toEqual(null)
+  })
+})
 
-//     vi.spyOn({ decodeToken }, "decodeToken").mockImplementation(() => (userInfo));
+describe("getUserInfoFromAccessToken function", () => {
+  it("should return UserInfoState when tokens are in localStorage", () => {
+    localStorage.setItem("objectToken", JSON.stringify({"access": tokenBody.access, "refresh": tokenBody.refresh }))
+    
+    expect(getUserInfoFromAccessToken()).toStrictEqual(createUserInfoState())
 
-//     const initialState = authReducer(undefined, { type: "@@INIT" });
+    localStorage.clear()
+  })
 
-//     expect(initialState.tokens).toEqual({
-//       access: "mocked_access_token",
-//       refresh: "mocked_refresh_token",
-//     });
-//     expect(initialState.userInfo).toEqual(userInfo);
+  it("should return null when tokens are not in localStorage", () => {
+    
+    expect(getUserInfoFromAccessToken()).toEqual(null)
 
-//     vi.restoreAllMocks();
-//   });
-// });
+    localStorage.clear()
+  })
+})
 
 describe("authSlice basic functionalities", () => {
   it("should handle setCredentials and setItem to localstorage", () => {
     vi.spyOn(Storage.prototype, "setItem");
 
-    const tokens: TokensState = filledInitialState.tokens as TokensState;
+    const tokens: TokensState = tokenBody;
     const userInfo: UserInfoState =
       filledInitialState.userInfo as UserInfoState;
 
@@ -68,7 +64,7 @@ describe("authSlice basic functionalities", () => {
 
     expect(localStorage.setItem).toHaveBeenCalledWith(
       "objectToken",
-      JSON.stringify({'access': tokens.access, 'refresh': tokens.refresh})
+      JSON.stringify({ access: tokens.access, refresh: tokens.refresh })
     );
 
     vi.restoreAllMocks();

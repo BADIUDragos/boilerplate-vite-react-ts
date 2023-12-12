@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AuthState, TokensState } from "../interfaces/authInterfaces";
+import { AuthState, TokensState, UserInfoState } from "../interfaces/authInterfaces";
 import { decodeToken } from "../../functions/decodeToken";
 
-const getTokensFromLocalStorage = () => {
+export const getTokensFromLocalStorage = (): TokensState | null => {
   const tokensObject = localStorage.getItem("objectToken");
   return tokensObject ? JSON.parse(tokensObject) : null;
 };
 
-const getUserInfoFromAccessToken = () => {
+export const getUserInfoFromAccessToken = (): UserInfoState | null => {
   const tokens = getTokensFromLocalStorage()
   if (tokens && tokens.access) return decodeToken(tokens.access)
   return null
