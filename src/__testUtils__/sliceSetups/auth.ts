@@ -1,4 +1,8 @@
-import { AuthState, TokensState, UserInfoState } from "../../store/interfaces/authInterfaces";
+import {
+  AuthState,
+  TokensState,
+  UserInfoState,
+} from "../../store/interfaces/authInterfaces";
 
 export const loggedOutState = {
   tokens: null,
@@ -11,36 +15,47 @@ export const tokenBody: TokensState = {
   refresh: "mock_refresh_token",
 };
 
-export const createUserInfoState = (overrides: Partial<UserInfoState> = {}): UserInfoState => {
+export const reAuthedTokens: TokensState = {
+  access:
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ1c2VyIiwicGVybWlzc2lvbnMiOlsidmlld19jb250ZW50IiwibmV3X3Blcm1pc3Npb24iXSwiZW1haWwiOiJ1c2VyQHJvbGxzLXJveWNlLmNvbSIsImlzU3VwZXJ1c2VyIjpmYWxzZSwiaXNTdGFmZiI6ZmFsc2V9.f93HUkTw-mSssaS_09BgBL03pyP8IsDgoZ2GxjQTqcM",
+  refresh: "new_mock_refresh_token",
+};
+
+export const createUserInfoState = (
+  overrides: Partial<UserInfoState> = {}
+): UserInfoState => {
   const defaultUserInfo: UserInfoState = {
     id: 1,
-    username: 'user',
-    email: 'user@rolls-royce.com',
-    permissions: ['view_content'],
+    username: "user",
+    email: "user@rolls-royce.com",
+    permissions: ["view_content"],
     isSuperuser: false,
     isStaff: false,
   };
-  
+
   return { ...defaultUserInfo, ...overrides };
 };
 
-export const createTokensState = (overrides: Partial<TokensState> = {}): TokensState => {
+export const createTokensState = (
+  overrides: Partial<TokensState> = {}
+): TokensState => {
   const defaultTokens: TokensState = {
-    access: 'mock_access_token',
-    refresh: 'mock_refresh_token',
+    access: "mock_access_token",
+    refresh: "mock_refresh_token",
   };
-  
+
   return { ...defaultTokens, ...overrides };
 };
 
-export const createAuthState = (overrides: Partial<AuthState> = {}): AuthState => {
-  
-  const completeTokensOverrides = overrides.tokens 
-    ? createTokensState(overrides.tokens) 
+export const createAuthState = (
+  overrides: Partial<AuthState> = {}
+): AuthState => {
+  const completeTokensOverrides = overrides.tokens
+    ? createTokensState(overrides.tokens)
     : {};
 
-  const completeUserInfoOverrides = overrides.userInfo 
-    ? createUserInfoState(overrides.userInfo) 
+  const completeUserInfoOverrides = overrides.userInfo
+    ? createUserInfoState(overrides.userInfo)
     : {};
 
   return {

@@ -26,7 +26,6 @@ import { renderHook, waitFor } from "@testing-library/react";
 import { authApiHandler, failedLogOutHandler, failedLoginHandler } from "../../../__testUtils__/mswHandlers/auth/authApiHandlers";
 import { createAuthState, createTokensState, createUserInfoState, loggedOutState, tokenBody } from "../../../__testUtils__/sliceSetups/auth";
 import { initializeTestServer } from "../../../__testUtils__/testServerSetup";
-import { HttpResponse, http } from "msw";
 
 
 const server = initializeTestServer(authApiHandler);

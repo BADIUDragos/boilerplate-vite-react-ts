@@ -1,7 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { renderWithProviders } from "../__testUtils__/testStores";
-import { fireEvent, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
+import userEvent from '@testing-library/user-event'
 
 import {
   createAuthState,
@@ -10,7 +11,7 @@ import {
 
 import Header from "./Header";
 import { Route, Routes } from "react-router-dom";
-import { AuthState } from "../store/interfaces/authInterfaces";
+import { AuthState, UserInfoState } from "../store/interfaces/authInterfaces";
 
 describe("Header rendering tests", () => {
   const setup = (authState: { auth: AuthState }, route = "/somepage") => {
@@ -48,18 +49,13 @@ describe("Header rendering tests", () => {
     );
   };
 
-  it("renders the Rolls-Royce logo correctly", () => {
-    setup({ auth: loggedOutState });
-
-    expect(screen.getByRole("img")).toHaveAttribute("src", "/images/logo.png");
-  });
-
-  it("navigates to home page when Rolls-Royce logo is clicked", () => {
+  it("renders and navigates to home page when Rolls-Royce logo is clicked", async () => {
     setup({ auth: loggedOutState });
 
     const logoImage = screen.getByRole("img");
+    expect(logoImage).toHaveAttribute("src", "/images/logo.png");
 
-    fireEvent.click(logoImage);
+    await userEvent.click(logoImage);
 
     expect(screen.getByText("Home Page")).toBeInTheDocument();
   });
@@ -73,27 +69,41 @@ describe("Header rendering tests", () => {
   it("navigates to login page if user clicks login", async () => {
     setup({ auth: loggedOutState });
 
-    const loginLink = screen.getByText("Login").closest("a");
-    fireEvent.click(loginLink as HTMLAnchorElement);
+    const loginLink = screen.getByRole('link', { name: 'Login' });
+    await userEvent.click(loginLink as HTMLAnchorElement);
 
     expect(screen.getByText("Login Page")).toBeInTheDocument();
   });
 
-  it("displays Logout if the user is signed in", () => {
-    setup({ auth: createAuthState() });
+  it("displays the user's name and Logout if the user is signed in", () => {
+    const authState = createAuthState()
+    const { userInfo } = authState
+    const { username } = userInfo as UserInfoState
 
-    const logout = screen.getByText("Logout");
+    setup({ auth: authState });
+
+    const usernameText = screen.getByText(`Hi ${username} !`)
+
+    expect(usernameText).toBeInTheDocument
+    const logout = screen.getByRole('button', { name: 'Logout' });
     expect(logout).toBeInTheDocument;
   });
 
-  it("logs out and redirects to home page if the user clicks logout", () => {
+  it("logs out and username is no longer in header", async () => {
+    const authState = createAuthState()
+    const { userInfo } = authState
+    const { username } = userInfo as UserInfoState
+
     setup({ auth: createAuthState() });
 
-    const logout = screen.getByText("Logout");
+    const logout = screen.getByRole('button', { name: 'Logout' });
 
-    fireEvent.click(logout);
+    await userEvent.click(logout);
 
+    const usernameText = screen.getByText(`Hi ${username} !`)
+
+    expect(usernameText).not.toBeInTheDocument
     expect(logout).not.toBeInTheDocument;
-    expect(screen.getByText("Home Page")).toBeInTheDocument;
+
   });
 });

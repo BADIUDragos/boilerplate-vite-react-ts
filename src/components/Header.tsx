@@ -19,12 +19,6 @@ const Header: React.FC<IHeader> = ({ className }) => {
     }
   };
 
-  useEffect(() => {
-    if(userInfo){
-      navigate("/");
-    }
-  }, [userInfo])
-
   return (
     <header className={className}>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
