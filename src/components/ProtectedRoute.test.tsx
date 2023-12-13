@@ -1,20 +1,19 @@
 import { describe, it, expect } from "vitest";
 import { screen } from "@testing-library/react";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import {
   AuthState
-} from "../../store/interfaces/authInterfaces";
-import ProtectedRoute from "../ProtectedRoute";
-import { renderWithProviders } from "../../__testUtils__/testStores";
+} from "../store/interfaces/authInterfaces";
+import ProtectedRoute from "./ProtectedRoute";
+import { renderWithProviders } from "../__testUtils__/testStores";
 
 import "@testing-library/jest-dom/vitest";
-import { createAuthState, createUserInfoState, loggedOutState } from "../../__testUtils__/sliceSetups/auth";
+import { createAuthState, createUserInfoState, loggedOutState } from "../__testUtils__/sliceSetups/auth";
 
 describe("ProtectedRoute", () => {
   const setup = (
     authState: { auth: AuthState },
     requiredPermissions: string[] = [],
-    requiredSuperUser: boolean = false,
     requiredStaff: boolean = false,
     redirectUrl: string = "/login"
   ) => {
@@ -26,7 +25,6 @@ describe("ProtectedRoute", () => {
               <ProtectedRoute
                 redirectUrl={redirectUrl}
                 requiredPermissions={requiredPermissions}
-                requiredSuperUser={requiredSuperUser}
                 requiredStaff={requiredStaff}
               >
                 <div>Protected Content</div>
@@ -71,7 +69,7 @@ describe("ProtectedRoute", () => {
   });
 
   it("redirects to login when user is not logged in and requiredStaff", () => {
-    setup({ auth: loggedOutState }, [], false, true);
+    setup({ auth: loggedOutState }, [], true);
 
     expect(screen.getByText("Login Page")).toBeInTheDocument();
   });

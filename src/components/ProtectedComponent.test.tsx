@@ -1,21 +1,20 @@
 import { describe, it, expect } from "vitest";
 import { screen } from "@testing-library/react";
-import { AuthState } from "../../store/interfaces/authInterfaces";
-import ProtectedComponent from "../ProtectedComponent";
-import { renderWithProviders } from "../../__testUtils__/testStores";
+import { AuthState } from "../store/interfaces/authInterfaces";
+import ProtectedComponent from "./ProtectedComponent";
+import { renderWithProviders } from "../__testUtils__/testStores";
 
 import "@testing-library/jest-dom/vitest";
 import {
   createAuthState,
   createUserInfoState,
   loggedOutState,
-} from "../../__testUtils__/sliceSetups/auth";
+} from "../__testUtils__/sliceSetups/auth";
 
 describe("ProtectedComponent", () => {
   const setup = (
     authState: { auth: AuthState },
     requiredPermissions: string[] = [],
-    requiredSuperUser: boolean = false,
     requiredStaff: boolean = false
   ) => {
     renderWithProviders(
@@ -23,7 +22,6 @@ describe("ProtectedComponent", () => {
         test
         <ProtectedComponent
           requiredPermissions={requiredPermissions}
-          requiredSuperUser={requiredSuperUser}
           requiredStaff={requiredStaff}
         >
           <div>Protected Content</div>

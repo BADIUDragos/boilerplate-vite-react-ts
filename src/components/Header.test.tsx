@@ -1,16 +1,16 @@
 import { describe, it, expect } from "vitest";
-import { renderWithProviders } from "../../__testUtils__/testStores";
+import { renderWithProviders } from "../__testUtils__/testStores";
 import { fireEvent, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 
 import {
   createAuthState,
   loggedOutState,
-} from "../../__testUtils__/sliceSetups/auth";
+} from "../__testUtils__/sliceSetups/auth";
 
-import Header from "../../components/Header";
+import Header from "./Header";
 import { Route, Routes } from "react-router-dom";
-import { AuthState } from "../../store/interfaces/authInterfaces";
+import { AuthState } from "../store/interfaces/authInterfaces";
 
 describe("Header rendering tests", () => {
   const setup = (authState: { auth: AuthState }, route = "/somepage") => {

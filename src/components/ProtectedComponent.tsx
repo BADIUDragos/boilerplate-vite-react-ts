@@ -1,26 +1,28 @@
 import { useAuth } from "../store";
 import isAuthorized from "./utils/isAuthorized";
-import RequireAtLeastOne from "./utils/requireAtLeastOne";
+import RequireAtLeastOne from "../functions/typeGuards/requireAtLeastOne";
 
 interface IProtectedComponent {
   children: React.ReactNode;
   requiredPermissions?: string[];
-  requiredSuperUser?: boolean
-  requiredStaff?: boolean
+  requiredStaff?: boolean;
 }
 
-type ProtectedComponentProps = RequireAtLeastOne<IProtectedComponent, 'requiredPermissions' | 'requiredSuperUser' | 'requiredStaff'>;
+type ProtectedComponentProps = RequireAtLeastOne<
+  IProtectedComponent,
+  "requiredPermissions" | "requiredStaff"
+>;
 
 const ProtectedComponent: React.FC<ProtectedComponentProps> = ({
   children,
   requiredPermissions = [],
-  requiredSuperUser = false,
-  requiredStaff = false
+  requiredStaff = false,
 }) => {
-  
-  const { userInfo } = useAuth()
+  const { userInfo } = useAuth();
 
-  return isAuthorized(userInfo, requiredPermissions, requiredSuperUser, requiredStaff) ? <>{children}</> : null;
+  return isAuthorized(userInfo, requiredPermissions, requiredStaff) ? (
+    <>{children}</>
+  ) : null;
 };
 
 export default ProtectedComponent;
