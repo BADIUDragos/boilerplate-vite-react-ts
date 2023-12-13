@@ -28,14 +28,6 @@ describe("getErrorString function", () => {
     expect(result).toBe("FetchBaseQueryError Detail");
   });
 
-  it("should return 'Unknown error' if the error isn't even an object", () => {
-    const unknownError = "This is an unknown error";
-
-    const result = getErrorString(unknownError as SerializedError);
-
-    expect(result).toBe("Error received isn't an object");
-  });
-
   it("should return 'Unknown error' if the error isn't either Serialized or FetchBaseQuery errors", () => {
     const unknownError = {something : "not what we're looking for", that: "will return Unknown error"};
 

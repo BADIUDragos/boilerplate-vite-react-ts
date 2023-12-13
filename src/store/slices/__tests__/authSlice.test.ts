@@ -19,9 +19,14 @@ const filledInitialState: AuthState = {
 
 describe("getTokensFromLocalStorage function", () => {
   it("should return ToeknsState when tokens are in localStorage", () => {
-    localStorage.setItem("objectToken", JSON.stringify({"access": tokenBody.access, "refresh": tokenBody.refresh }))
+    vi.spyOn(Storage.prototype, "setItem");
+    const tokens = {"access": tokenBody.access, "refresh": tokenBody.refresh }
+    const stringifiedTokens = JSON.stringify(tokens)
+
+    localStorage.setItem("tokens", stringifiedTokens)
     
     expect(getTokensFromLocalStorage()).toStrictEqual(tokenBody)
+    expect(localStorage.setItem).toHaveBeenCalledWith('tokens' , stringifiedTokens);
 
     localStorage.clear()
   })
@@ -33,9 +38,14 @@ describe("getTokensFromLocalStorage function", () => {
 
 describe("getUserInfoFromAccessToken function", () => {
   it("should return UserInfoState when tokens are in localStorage", () => {
-    localStorage.setItem("objectToken", JSON.stringify({"access": tokenBody.access, "refresh": tokenBody.refresh }))
+    vi.spyOn(Storage.prototype, "setItem");
+    const tokens = {"access": tokenBody.access, "refresh": tokenBody.refresh }
+    const stringifiedTokens = JSON.stringify(tokens)
+
+    localStorage.setItem("tokens", stringifiedTokens)
     
     expect(getUserInfoFromAccessToken()).toStrictEqual(createUserInfoState())
+    expect(localStorage.setItem).toHaveBeenCalledWith('tokens' , stringifiedTokens);
 
     localStorage.clear()
   })
@@ -63,7 +73,7 @@ describe("authSlice basic functionalities", () => {
     expect(newState.userInfo).toEqual(userInfo);
 
     expect(localStorage.setItem).toHaveBeenCalledWith(
-      "objectToken",
+      "tokens",
       JSON.stringify({ access: tokens.access, refresh: tokens.refresh })
     );
 
@@ -80,7 +90,7 @@ describe("authSlice basic functionalities", () => {
 
     expect(newState).toEqual(expectedState);
 
-    expect(localStorage.removeItem).toHaveBeenCalledWith("objectToken");
+    expect(localStorage.removeItem).toHaveBeenCalledWith("tokens");
 
     vi.restoreAllMocks();
   });

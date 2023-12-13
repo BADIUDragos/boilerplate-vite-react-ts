@@ -32,3 +32,17 @@ export function fulfilledMutation(
     data: data,
   };
 }
+
+export function failedMutation(
+  endpointName: string,
+  originalArgs: any,
+) {
+  return {
+    status: "rejected",
+    endpointName: endpointName,
+    isLoading: false,
+    isSuccess: false,
+    isError: true,
+    originalArgs: originalArgs,
+  };
+}

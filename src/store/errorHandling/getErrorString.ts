@@ -4,7 +4,6 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 const getErrorString = (
   error: FetchBaseQueryError | SerializedError
 ): string => {
-  if (typeof error !== "object") return "Error received isn't an object";
 
   if ("message" in error) {
     const SerializedError = error as SerializedError;
