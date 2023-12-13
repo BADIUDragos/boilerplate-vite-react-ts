@@ -1,9 +1,6 @@
 import { describe, it, expect } from "vitest";
 
 import { getWrapper } from "../../../__testUtils__/functions";
-import {
-  authStoreWithPreloadedState,
-} from "../../../__testUtils__/testStores";
 
 import {
   useLoginMutation,
@@ -26,6 +23,7 @@ import { renderHook, waitFor } from "@testing-library/react";
 import { authApiHandler, failedLogOutHandler, failedLoginHandler } from "../../../__testUtils__/mswHandlers/auth/authApiHandlers";
 import { createAuthState, createTokensState, createUserInfoState, loggedOutState, tokenBody } from "../../../__testUtils__/sliceSetups/auth";
 import { initializeTestServer } from "../../../__testUtils__/testServerSetup";
+import setupStore from "../..";
 
 
 const server = initializeTestServer(authApiHandler);
@@ -38,7 +36,7 @@ describe("Login User", () => {
       tokens: createTokensState({access: tokenBody.access})
     });
 
-    const store = authStoreWithPreloadedState();
+    const store = setupStore();
     const wrapper = getWrapper(store);
 
     const { result } = renderHook(() => useLoginMutation(undefined), {
@@ -77,7 +75,7 @@ describe("Login User", () => {
 
     server.use(failedLoginHandler)
 
-    const store = authStoreWithPreloadedState();
+    const store = setupStore();
     const wrapper = getWrapper(store);
 
     const { result } = renderHook(() => useLoginMutation(undefined), {
@@ -124,7 +122,7 @@ describe("Login User", () => {
       auth: loggedOutState,
     };
 
-    const store = authStoreWithPreloadedState(preloadedState);
+    const store = setupStore(preloadedState);
     const wrapper = getWrapper(store);
 
     const { result } = renderHook(() => useLogoutMutation(undefined), {
@@ -174,7 +172,7 @@ describe("Login User", () => {
       auth: loggedOutState,
     };
 
-    const store = authStoreWithPreloadedState(preloadedState);
+    const store = setupStore(preloadedState);
     const wrapper = getWrapper(store);
 
     const { result } = renderHook(() => useLogoutMutation(undefined), {

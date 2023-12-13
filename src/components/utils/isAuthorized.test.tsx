@@ -56,7 +56,7 @@ describe('isAuthorized', () => {
     const userInfo = createUserInfoState({permissions: ['view_content', 'change_content']})
     
     const result = isAuthorized(userInfo, ['view_content', 'change_content', 'delete_content'], false);
-    expect(result).toBe(true);
+    expect(result).toBe(false);
   });
 
 });

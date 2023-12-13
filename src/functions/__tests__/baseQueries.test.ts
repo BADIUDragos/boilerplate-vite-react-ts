@@ -6,10 +6,10 @@ import { act } from "react-dom/test-utils";
 import { renderHook, waitFor } from "@testing-library/react";
 import { AuthState, LoginCredentials } from "../../store/interfaces/authInterfaces";
 import { createAuthState, createTokensState, createUserInfoState, tokenBody } from "../../__testUtils__/sliceSetups/auth";
-import { authStoreWithPreloadedState } from "../../__testUtils__/testStores";
 import { failedMutation, pendingMutation, uninitializedMutation } from "../../__testUtils__/mutationObjectStates";
 import { initializeTestServer } from "../../__testUtils__/testServerSetup";
 import { baseQueriesHandlers } from "../../__testUtils__/mswHandlers/baseQueries/baseQueriesHandlers";
+import setupStore from "../../store";
 
 const exampleTokenError = {
   code: "token_not_valid",
@@ -29,7 +29,7 @@ describe("baseQueryWithReauth", () => {
       tokens: createTokensState({access: tokenBody.access})
     });
 
-    const store = authStoreWithPreloadedState({auth: initialAuthState});
+    const store = setupStore({auth: initialAuthState});
     const wrapper = getWrapper(store);
 
     const { result } = renderHook(() => useLoginMutation(undefined), {

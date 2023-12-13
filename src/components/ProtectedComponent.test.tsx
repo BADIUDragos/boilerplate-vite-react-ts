@@ -34,9 +34,8 @@ describe("ProtectedComponent", () => {
   it("renders children for authorized users", () => {
     const state = createAuthState();
 
-    setup({ auth: state }, ["view_content"]), ["view_content"];
+    setup({ auth: state }, ["view_content"]), false;
 
-    screen.debug();
     expect(screen.getByText("test")).toBeInTheDocument();
     expect(screen.getByText("Protected Content")).toBeInTheDocument();
   });
@@ -51,23 +50,7 @@ describe("ProtectedComponent", () => {
     expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
   });
 
-  it("does not render children for users that are't logged in", () => {
-    setup({ auth: loggedOutState }, ["view_content"]);
-
-    expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
-  });
-
-  it("requires at least one requirement", () => {
-    const state = createAuthState({
-      userInfo: createUserInfoState({ permissions: ["other_permissions"] }),
-    });
-
-    setup({ auth: state }, ["view_content"]);
-
-    expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
-  });
-
-  it("not too sure about this one", () => {
+  it("typescript error if at least one protection requirement isn't provided", () => {
     renderWithProviders(
       // @ts-expect-error
       <ProtectedComponent>

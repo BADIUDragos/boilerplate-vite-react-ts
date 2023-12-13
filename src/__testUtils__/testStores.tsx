@@ -1,11 +1,6 @@
 import {
   PreloadedState,
-  combineReducers,
-  configureStore,
 } from "@reduxjs/toolkit";
-import authReducer from "../store/slices/authSlice";
-import { baseApi } from "../store/apis/baseApi";
-import { authApi } from "../store/apis/authApi";
 import setupStore, { AppStore, RootState } from "../store";
 import { RenderOptions, render } from "@testing-library/react";
 import { Provider } from "react-redux";
@@ -38,17 +33,3 @@ export function renderWithProviders(
   }
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 }
-
-export const authStoreWithPreloadedState = (preloadedState?: any) => {
-  const store = configureStore({
-    reducer: combineReducers({
-      [baseApi.reducerPath]: baseApi.reducer,
-      auth: authReducer,
-    }),
-    preloadedState: preloadedState,
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(authApi.middleware),
-  });
-
-  return store;
-};

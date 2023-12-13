@@ -62,15 +62,19 @@ describe("ProtectedRoute", () => {
     expect(screen.getByText("Login Page")).toBeInTheDocument();
   });
 
-  it("redirects to login when user is not logged in and requiredSuperUser", () => {
+  it("redirects to login when user is not logged in and requiredStaff", () => {
     setup({ auth: loggedOutState }, [], true);
 
     expect(screen.getByText("Login Page")).toBeInTheDocument();
   });
 
-  it("redirects to login when user is not logged in and requiredStaff", () => {
-    setup({ auth: loggedOutState }, [], true);
-
-    expect(screen.getByText("Login Page")).toBeInTheDocument();
+  it("typescript error if at least one protection requirement isn't provided", () => {
+    renderWithProviders(
+      // @ts-expect-error
+      <ProtectedRoute>
+        <div>Protected Content</div>
+      </ProtectedRoute>,
+      { preloadedState: {auth: createAuthState()} }
+    );
   });
 });
