@@ -2,7 +2,7 @@ import {
   AuthState,
   TokensState,
   UserInfoState,
-} from "../../store/interfaces/authInterfaces";
+} from "../../interfaces/authInterfaces";
 
 export const loggedOutState = {
   tokens: null,

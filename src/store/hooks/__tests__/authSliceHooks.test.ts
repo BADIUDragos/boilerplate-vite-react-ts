@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { renderHook } from '@testing-library/react';
 import { useAuth } from '../authSliceHooks';
 import setupStore from '../..';
-import { createAuthState } from '../../../__testUtils__/sliceSetups/auth';
+import { createAuthState } from '../../slices/__tests__/authSetups';
 import { getWrapper } from '../../../__testUtils__/functions';
 
 

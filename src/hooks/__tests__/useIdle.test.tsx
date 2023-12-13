@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { useIdle } from '../useIdle';
 import { renderWithProviders } from '../../__testUtils__/testStores';
-import { createAuthState, loggedOutState } from '../../__testUtils__/sliceSetups/auth';
+import { createAuthState, loggedOutState } from '../../store/slices/__tests__/authSetups';
 
 const SomePageUsingUseIdleHook = () => {
   useIdle(5000)

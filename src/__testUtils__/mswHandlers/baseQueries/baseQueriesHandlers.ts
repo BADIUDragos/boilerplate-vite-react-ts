@@ -1,6 +1,6 @@
 import { HttpResponse, http } from "msw";
 import { API_URL } from "../../../constants/urls";
-import { reAuthedTokens } from "../../sliceSetups/auth";
+import { reAuthedTokens } from "../../../store/slices/__tests__/authSetups";
 
 
 export const baseQueriesHandlers = [

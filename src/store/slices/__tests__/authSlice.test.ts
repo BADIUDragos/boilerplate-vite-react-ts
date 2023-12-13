@@ -10,7 +10,7 @@ import {
   createUserInfoState,
   loggedOutState,
   tokenBody,
-} from "../../../__testUtils__/sliceSetups/auth";
+} from "./authSetups";
 
 const filledInitialState: AuthState = {
   tokens: createTokensState(),

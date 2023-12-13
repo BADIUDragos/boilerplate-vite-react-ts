@@ -8,7 +8,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import { renderWithProviders } from "../__testUtils__/testStores";
 
 import "@testing-library/jest-dom/vitest";
-import { createAuthState, createUserInfoState, loggedOutState } from "../__testUtils__/sliceSetups/auth";
+import { createAuthState, createUserInfoState, loggedOutState } from "../store/slices/__tests__/authSetups";
 
 describe("ProtectedRoute", () => {
   const setup = (

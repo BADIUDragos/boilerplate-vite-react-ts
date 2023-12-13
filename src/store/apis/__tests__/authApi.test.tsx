@@ -16,12 +16,12 @@ import {
   fulfilledMutation,
   pendingMutation,
   uninitializedMutation,
-} from "../../../__testUtils__/mutationObjectStates";
+} from "./mutationObjectStates";
 import { act } from "react-dom/test-utils";
 import { renderHook, waitFor } from "@testing-library/react";
 
-import { authApiHandler, failedLogOutHandler, failedLoginHandler } from "../../../__testUtils__/mswHandlers/auth/authApiHandlers";
-import { createAuthState, createTokensState, createUserInfoState, loggedOutState, tokenBody } from "../../../__testUtils__/sliceSetups/auth";
+import { authApiHandler, failedLogOutHandler, failedLoginHandler } from "./authApiHandlers";
+import { createAuthState, createTokensState, createUserInfoState, loggedOutState, tokenBody } from "../../slices/__tests__/authSetups";
 import { initializeTestServer } from "../../../__testUtils__/testServerSetup";
 import setupStore from "../..";
 

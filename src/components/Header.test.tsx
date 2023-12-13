@@ -7,7 +7,7 @@ import userEvent from '@testing-library/user-event'
 import {
   createAuthState,
   loggedOutState,
-} from "../__testUtils__/sliceSetups/auth";
+} from "../store/slices/__tests__/authSetups";
 
 import Header from "./Header";
 import { Route, Routes } from "react-router-dom";

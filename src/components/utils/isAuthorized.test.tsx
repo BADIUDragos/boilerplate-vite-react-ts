@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import isAuthorized from './isAuthorized';
-import { createUserInfoState } from '../../__testUtils__/sliceSetups/auth';
+import { createUserInfoState } from '../../store/slices/__tests__/authSetups';
 
 describe('isAuthorized', () => {
 

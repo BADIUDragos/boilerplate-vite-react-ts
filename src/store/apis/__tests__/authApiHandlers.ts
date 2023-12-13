@@ -1,6 +1,6 @@
 import { HttpResponse, http } from "msw";
 import { API_URL } from "../../../constants/urls";
-import { tokenBody } from "../../sliceSetups/auth";
+import { tokenBody } from "../../slices/__tests__/authSetups";
 
 export const authApiHandler = [
   http.post(`${API_URL}/auth/login`, async () => {
