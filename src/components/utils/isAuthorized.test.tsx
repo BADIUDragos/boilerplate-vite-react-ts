@@ -18,7 +18,7 @@ describe("isAuthorized", () => {
     });
 
     const result = isAuthorized(userInfo, {
-      requiredPermissions: [],
+      requiredPermissions: ["many_permissions"],
       requiredStaff: false,
     });
     expect(result).toBe(true);
