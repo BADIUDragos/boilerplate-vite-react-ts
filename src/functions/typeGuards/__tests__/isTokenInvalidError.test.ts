@@ -40,7 +40,7 @@ describe('isAccessTokenInvalidError', () => {
   it('message not token invalid error', () => {
     const error = {
       code: 'token_not',
-      messages: [{ token_type: 'refresh' }]
+      messages: [{ token_type: 'access' }]
     };
     expect(isAccessTokenInvalidError(error)).toBeFalsy();
   });
