@@ -8,7 +8,6 @@ import "@testing-library/jest-dom/vitest";
 import {
   createAuthState,
   createUserInfoState,
-  loggedOutState,
 } from "../store/slices/__tests__/authSetups";
 
 describe("ProtectedComponent", () => {

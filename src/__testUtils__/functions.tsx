@@ -1,8 +1,7 @@
-import { AnyAction, Store } from "@reduxjs/toolkit";
-import { Provider } from "react-redux";
+import { AppStore } from "../store";
+import { Wrapper } from "./testStores";
+import { PropsWithChildren } from "react";
 
-export const getWrapper = (store: Store<any, AnyAction>): React.FC => {
-  return ({ children }: { children?: React.ReactNode }) => (
-    <Provider store={store}>{children}</Provider>
-  );
-}
+export const getWrapper = (store: AppStore) => {
+  return ({ children }: PropsWithChildren<{}>) => <Wrapper store={store}>{children}</Wrapper>;
+};

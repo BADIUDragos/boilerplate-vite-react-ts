@@ -2,12 +2,10 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../store";
 import isAuthorized from "./utils/isAuthorized";
 import RequireAtLeastOne from "../functions/typeGuards/requireAtLeastOne";
+import { IProtectedComponent } from "./ProtectedComponent";
 
-interface IProtectedRoute {
-  children: React.ReactNode;
+interface IProtectedRoute extends IProtectedComponent {
   redirectUrl?: string;
-  requiredPermissions?: string[];
-  requiredStaff?: boolean;
 }
 
 type ProtectedRouteProps = RequireAtLeastOne<
@@ -23,7 +21,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 }) => {
   const { userInfo } = useAuth();
 
-  return isAuthorized(userInfo, requiredPermissions, requiredStaff) ? (
+  return isAuthorized(userInfo, { requiredPermissions, requiredStaff }) ? (
     <>{children}</>
   ) : (
     <Navigate to={redirectUrl} />
