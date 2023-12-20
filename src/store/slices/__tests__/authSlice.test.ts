@@ -1,10 +1,10 @@
-import authReducer, { setCredentials, logOut, getUserInfoFromAccessToken, getTokensFromLocalStorage } from "../authSlice";
+import authReducer, { setCredentials, logOut, getInitialAuthState } from "../authSlice";
 import {
   AuthState,
   TokensState,
   UserInfoState,
 } from "../../interfaces/authInterfaces";
-import { vi, describe, it, expect } from "vitest";
+import { vi, describe, it, expect, beforeEach } from "vitest";
 import {
   createTokensState,
   createUserInfoState,
@@ -12,6 +12,7 @@ import {
   otherTokenBody,
   tokenBody,
 } from "./authSetups";
+import { decodeToken } from "../../../functions/decodeToken";
 
 const filledInitialState: AuthState = {
   tokens: createTokensState(),
@@ -19,53 +20,50 @@ const filledInitialState: AuthState = {
 };
 
 describe("getTokensFromLocalStorage function", () => {
-  it("should return ToeknsState when tokens are in localStorage", () => {
-    vi.spyOn(Storage.prototype, "setItem");
-    const tokens = {"access": tokenBody.access, "refresh": tokenBody.refresh }
-    const stringifiedTokens = JSON.stringify(tokens)
 
-    localStorage.setItem("tokens", stringifiedTokens)
-    
-    expect(getTokensFromLocalStorage()).toStrictEqual(tokenBody)
-    expect(localStorage.setItem).toHaveBeenCalledWith('tokens' , stringifiedTokens);
+  vi.mock('./path-to-decodeToken', () => ({
+    decodeToken: vi.fn(),
+  }));
 
-    localStorage.clear()
-  })
+  beforeEach(() => {
+    localStorage.clear();
+    vi.restoreAllMocks();
+  });
 
-  it("should return null when tokens are not in localStorage", () => {
-    expect(getTokensFromLocalStorage()).toEqual(null)
-  })
-})
+  it('returns null for both tokens and userInfo when localStorage is empty', () => {
+    const state = getInitialAuthState();
+    expect(state.tokens).toBeNull();
+    expect(state.userInfo).toBeNull();
+  });
 
-describe("getUserInfoFromAccessToken function", () => {
-  it("should return UserInfoState when tokens are in localStorage", () => {
-    vi.spyOn(Storage.prototype, "setItem");
-    const tokens = {"access": tokenBody.access, "refresh": tokenBody.refresh }
-    const stringifiedTokens = JSON.stringify(tokens)
+  it('parses valid tokens from localStorage and decodes userInfo', () => {
 
-    localStorage.setItem("tokens", stringifiedTokens)
-    
-    expect(getUserInfoFromAccessToken()).toStrictEqual(createUserInfoState())
-    expect(localStorage.setItem).toHaveBeenCalledWith('tokens' , stringifiedTokens);
+    localStorage.setItem('tokens', JSON.stringify(tokenBody));
 
-    localStorage.clear()
-  })
+    const state = getInitialAuthState();
 
-  it("should return null when tokens are not in localStorage", () => {
-    
-    expect(getUserInfoFromAccessToken()).toEqual(null)
+    expect(state.tokens).toEqual(tokenBody);
+    expect(state.userInfo).toEqual(createUserInfoState());
+  });
 
-    localStorage.clear()
-  })
+  it('returns null for both tokens and userInfo when token decoding fails', () => {
+    const badTokens = { access: 'invalidAccessToken', refresh: 'mockRefreshToken' };
+    localStorage.setItem('tokens', JSON.stringify(badTokens));
 
-  it("should return null when something random is inside localStorage", () => {
-    
-    localStorage.setItem("tokens", 'something Random')
+    const state = getInitialAuthState();
 
-    expect(getUserInfoFromAccessToken()).toEqual(null)
+    expect(state.tokens).toBeNull();
+    expect(state.userInfo).toBeNull();
+  });
 
-    localStorage.clear()
-  })
+  it('handles invalid JSON in localStorage', () => {
+    localStorage.setItem('tokens', 'invalidJson');
+
+    const state = getInitialAuthState();
+
+    expect(state.tokens).toBeNull();
+    expect(state.userInfo).toBeNull();
+  });
 })
 
 describe("authSlice basic functionalities", () => {

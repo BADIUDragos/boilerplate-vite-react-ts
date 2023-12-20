@@ -5,7 +5,6 @@ import setupStore, { AppStore, RootState } from "../store";
 import { RenderOptions, render } from "@testing-library/react";
 import { Provider } from "react-redux";
 import React, { PropsWithChildren } from "react";
-import { getWrapper } from "./functions";
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
   preloadedState?: PreloadedState<RootState>;
@@ -21,6 +20,10 @@ export const Wrapper: React.FC<PropsWithChildren<WrapperProps>> = ({ children, s
   <Provider store={store}>{children}</Provider>
 );
 
+export const getWrapper = (store: AppStore) => {
+  return ({ children }: PropsWithChildren<{}>) => <Wrapper store={store}>{children}</Wrapper>;
+};
+
 export function renderWithProviders(
   ui: React.ReactElement,
   {
@@ -29,10 +32,9 @@ export function renderWithProviders(
     ...renderOptions
   }: ExtendedRenderOptions = {}
 ) {
-  const ProvidersWrapper = getWrapper(store);
 
   return {
     store,
-    ...render(ui, { wrapper: ProvidersWrapper, ...renderOptions }),
+    ...render(ui, { wrapper: getWrapper(store), ...renderOptions }),
   };
 }

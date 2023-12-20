@@ -6,27 +6,28 @@ import {
 } from "../interfaces/authInterfaces";
 import { decodeToken } from "../../functions/decodeToken";
 
-export const getTokensFromLocalStorage = (): TokensState | null => {
-  const tokens = localStorage.getItem("tokens");
-
+export const getInitialAuthState = (): AuthState => {
   try {
-    return tokens ? JSON.parse(tokens) : null;
+    const tokensString = localStorage.getItem("tokens");
+    if (!tokensString) {
+      return { tokens: null, userInfo: null };
+    }
+
+    const parsedTokens: TokensState = JSON.parse(tokensString);
+    const userInfo: UserInfoState | null = decodeToken(parsedTokens.access);
+
+    if (!userInfo) {
+      return { tokens: null, userInfo: null };
+    }
+
+    return { tokens: parsedTokens, userInfo: userInfo };
   } catch (error: any) {
-    return null
+    console.error("Error retrieving or decoding tokens", error);
+    return { tokens: null, userInfo: null };
   }
-  
 };
 
-export const getUserInfoFromAccessToken = (): UserInfoState | null => {
-  const tokens = getTokensFromLocalStorage();
-  if (tokens && tokens.access) return decodeToken(tokens.access);
-  return null;
-};
-
-const initialState: AuthState = {
-  tokens: getTokensFromLocalStorage(),
-  userInfo: getUserInfoFromAccessToken(),
-};
+const initialState: AuthState = getInitialAuthState();
 
 const authSlice = createSlice({
   name: "auth",

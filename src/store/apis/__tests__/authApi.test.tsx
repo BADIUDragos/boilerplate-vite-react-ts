@@ -1,7 +1,5 @@
 import { describe, it, expect } from "vitest";
 
-import { getWrapper } from "../../../__testUtils__/functions";
-
 import {
   useLoginMutation,
   useLogoutMutation,
@@ -24,6 +22,7 @@ import { authApiHandler, failedLogOutHandler, failedLoginHandler } from "./authA
 import { createAuthState, createTokensState, createUserInfoState, loggedOutState, tokenBody } from "../../slices/__tests__/authSetups";
 import { initializeTestServer } from "../../../__testUtils__/testServerSetup";
 import setupStore from "../..";
+import { getWrapper } from "../../../__testUtils__/testStores";
 
 
 const server = initializeTestServer(authApiHandler);

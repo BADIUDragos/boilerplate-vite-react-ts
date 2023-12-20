@@ -3,7 +3,7 @@ import { renderHook } from '@testing-library/react';
 import { useAuth } from '../authSliceHooks';
 import setupStore from '../..';
 import { createAuthState } from '../../slices/__tests__/authSetups';
-import { getWrapper } from '../../../__testUtils__/functions';
+import { getWrapper } from '../../../__testUtils__/testStores';
 
 
 describe('useAuth hook', () => {
