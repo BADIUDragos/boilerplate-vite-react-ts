@@ -9,6 +9,7 @@ import {
   createTokensState,
   createUserInfoState,
   loggedOutState,
+  otherTokenBody,
   tokenBody,
 } from "./authSetups";
 
@@ -56,6 +57,15 @@ describe("getUserInfoFromAccessToken function", () => {
 
     localStorage.clear()
   })
+
+  it("should return null when something random is inside localStorage", () => {
+    
+    localStorage.setItem("tokens", 'something Random')
+
+    expect(getUserInfoFromAccessToken()).toEqual(null)
+
+    localStorage.clear()
+  })
 })
 
 describe("authSlice basic functionalities", () => {
@@ -75,6 +85,25 @@ describe("authSlice basic functionalities", () => {
     expect(localStorage.setItem).toHaveBeenCalledWith(
       "tokens",
       JSON.stringify({ access: tokens.access, refresh: tokens.refresh })
+    );
+
+    vi.restoreAllMocks();
+  });
+
+  it("should overrite current credentials if setCredentials called again", () => {
+    vi.spyOn(Storage.prototype, "setItem");
+
+    const otherTokens: TokensState = otherTokenBody;
+
+    const action = setCredentials({ tokens: otherTokens });
+    const newState = authReducer(filledInitialState, action);
+
+    expect(newState.tokens).toEqual(otherTokens);
+    expect(newState.userInfo).toEqual(createUserInfoState({permissions: ["view_content", "delete_content"], username: "other_user", email: "other_user@rolls-royce.com"}));
+
+    expect(localStorage.setItem).toHaveBeenCalledWith(
+      "tokens",
+      JSON.stringify({ access: otherTokens.access, refresh: otherTokens.refresh })
     );
 
     vi.restoreAllMocks();

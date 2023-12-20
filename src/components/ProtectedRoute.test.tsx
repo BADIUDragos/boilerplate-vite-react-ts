@@ -1,14 +1,16 @@
 import { describe, it, expect } from "vitest";
 import { screen } from "@testing-library/react";
-import { Route, Routes } from "react-router-dom";
-import {
-  AuthState
-} from "../store/interfaces/authInterfaces";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { AuthState } from "../store/interfaces/authInterfaces";
 import ProtectedRoute from "./ProtectedRoute";
 import { renderWithProviders } from "../__testUtils__/testStores";
 
 import "@testing-library/jest-dom/vitest";
-import { createAuthState, createUserInfoState, loggedOutState } from "../store/slices/__tests__/authSetups";
+import {
+  createAuthState,
+  createUserInfoState,
+  loggedOutState,
+} from "../store/slices/__tests__/authSetups";
 
 describe("ProtectedRoute", () => {
   const setup = (
@@ -18,6 +20,7 @@ describe("ProtectedRoute", () => {
     redirectUrl: string = "/login"
   ) => {
     renderWithProviders(
+      <MemoryRouter initialEntries={['/protected']}>
         <Routes>
           <Route
             path="/protected"
@@ -32,9 +35,9 @@ describe("ProtectedRoute", () => {
             }
           />
           <Route path="/login" element={<div>Login Page</div>} />
-        </Routes>,
-      { preloadedState: authState,
-        route: '/protected' },
+        </Routes>
+      </MemoryRouter>,
+      { preloadedState: authState}
     );
   };
 
@@ -74,7 +77,7 @@ describe("ProtectedRoute", () => {
       <ProtectedRoute>
         <div>Protected Content</div>
       </ProtectedRoute>,
-      { preloadedState: {auth: createAuthState()} }
+      { preloadedState: { auth: createAuthState() } }
     );
   });
 });

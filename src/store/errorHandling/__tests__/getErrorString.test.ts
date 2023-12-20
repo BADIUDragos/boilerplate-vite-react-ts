@@ -28,12 +28,23 @@ describe("getErrorString function", () => {
     expect(result).toBe("FetchBaseQueryError Detail");
   });
 
-  it("should return 'Unknown error' if the error isn't either Serialized or FetchBaseQuery errors", () => {
-    const unknownError = {something : "not what we're looking for", that: "will return Unknown error"};
+  it('should return "Unknown error" for error objects without message or detail', () => {
+    const errorWithoutMessageOrDetail = {
+      status: 500,
+      data: { notDetail: 'Some error data' }
+    };
+    
+    const result = getErrorString(errorWithoutMessageOrDetail as any);
+    expect(result).toBe('Unknown error');
+  });
 
-    // @ts-expect-error
-    const result = getErrorString(unknownError);
-
-    expect(result).toBe("Unknown error");
+  it('should return "Unknown error" for error objects with non-string detail', () => {
+    const errorWithNonStringDetail = {
+      status: 500,
+      data: { detail: { some: 'object' } }
+    };
+    
+    const result = getErrorString(errorWithNonStringDetail as any);
+    expect(result).toBe('Unknown error');
   });
 });

@@ -8,7 +8,13 @@ import { decodeToken } from "../../functions/decodeToken";
 
 export const getTokensFromLocalStorage = (): TokensState | null => {
   const tokens = localStorage.getItem("tokens");
-  return tokens ? JSON.parse(tokens) : null;
+
+  try {
+    return tokens ? JSON.parse(tokens) : null;
+  } catch (error: any) {
+    return null
+  }
+  
 };
 
 export const getUserInfoFromAccessToken = (): UserInfoState | null => {

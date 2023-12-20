@@ -15,6 +15,12 @@ export const tokenBody: TokensState = {
   refresh: "mock_refresh_token",
 };
 
+export const otherTokenBody: TokensState = {
+  access:
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJvdGhlcl91c2VyIiwicGVybWlzc2lvbnMiOlsidmlld19jb250ZW50IiwiZGVsZXRlX2NvbnRlbnQiXSwiZW1haWwiOiJvdGhlcl91c2VyQHJvbGxzLXJveWNlLmNvbSIsImlzU3VwZXJ1c2VyIjpmYWxzZSwiaXNTdGFmZiI6ZmFsc2V9.nWHNpb4ic5fu3EHTDLoRovQrYkkbw_y_7FIk0eLpKlQ",
+  refresh: "mock_refresh_token2",
+};
+
 export const reAuthedTokens: TokensState = {
   access:
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ1c2VyIiwicGVybWlzc2lvbnMiOlsidmlld19jb250ZW50IiwibmV3X3Blcm1pc3Npb24iXSwiZW1haWwiOiJ1c2VyQHJvbGxzLXJveWNlLmNvbSIsImlzU3VwZXJ1c2VyIjpmYWxzZSwiaXNTdGFmZiI6ZmFsc2V9.f93HUkTw-mSssaS_09BgBL03pyP8IsDgoZ2GxjQTqcM",
