@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { renderWithProviders } from "../__testUtils__/testStores";
+import { renderWithProviders } from "../../__testUtils__/testStores";
 import { screen } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import userEvent from "@testing-library/user-event";
@@ -7,11 +7,11 @@ import userEvent from "@testing-library/user-event";
 import {
   createAuthState,
   loggedOutState,
-} from "../store/slices/__tests__/authSetups";
+} from "../../store/slices/__tests__/authSetups";
 
-import Header from "./Header";
+import Header from "../Header";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { AuthState, UserInfoState } from "../store/interfaces/authInterfaces";
+import { AuthState, UserInfoState } from "../../store/interfaces/authInterfaces";
 
 describe("Header rendering tests", () => {
   const setup = (authState: { auth: AuthState }, route = "/somepage") => {

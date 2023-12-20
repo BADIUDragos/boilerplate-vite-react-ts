@@ -1,14 +1,12 @@
 import { Navbar, Container, Nav } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth, useLogoutMutation } from "../store";
-import { useEffect } from "react";
 
 interface IHeader {
   className?: string;
 }
 
 const Header: React.FC<IHeader> = ({ className }) => {
-  const navigate = useNavigate();
   const { tokens, userInfo } = useAuth()
 
   const [logout] = useLogoutMutation();

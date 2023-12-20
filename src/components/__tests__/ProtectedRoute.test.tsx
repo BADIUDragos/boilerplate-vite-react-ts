@@ -1,26 +1,31 @@
 import { describe, it, expect } from "vitest";
 import { screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { AuthState } from "../store/interfaces/authInterfaces";
-import ProtectedRoute from "./ProtectedRoute";
-import { renderWithProviders } from "../__testUtils__/testStores";
+import { AuthState } from "../../store/interfaces/authInterfaces";
+import ProtectedRoute from "../ProtectedRoute";
+import { renderWithProviders } from "../../__testUtils__/testStores";
 
 import "@testing-library/jest-dom/vitest";
 import {
   createAuthState,
   createUserInfoState,
   loggedOutState,
-} from "../store/slices/__tests__/authSetups";
+} from "../../store/slices/__tests__/authSetups";
+import { IProtectedComponentSetupOptions } from "./ProtectedComponent.test";
 
 describe("ProtectedRoute", () => {
   const setup = (
-    authState: { auth: AuthState },
-    requiredPermissions: string[] = [],
-    requiredStaff: boolean = false,
+    options: IProtectedComponentSetupOptions,
     redirectUrl: string = "/login"
   ) => {
+    const {
+      authState,
+      requiredPermissions = [],
+      requiredStaff = false,
+    } = options;
+
     renderWithProviders(
-      <MemoryRouter initialEntries={['/protected']}>
+      <MemoryRouter initialEntries={["/protected"]}>
         <Routes>
           <Route
             path="/protected"
@@ -37,14 +42,17 @@ describe("ProtectedRoute", () => {
           <Route path="/login" element={<div>Login Page</div>} />
         </Routes>
       </MemoryRouter>,
-      { preloadedState: authState}
+      { preloadedState: authState }
     );
   };
 
   it("renders children for authorized users", () => {
     const state = createAuthState();
 
-    setup({ auth: state }, ["view_content"]);
+    setup({
+      authState: { auth: state },
+      requiredPermissions: ["view_content"],
+    });
 
     expect(screen.getByText("Protected Content")).toBeInTheDocument();
   });
@@ -54,19 +62,29 @@ describe("ProtectedRoute", () => {
       userInfo: createUserInfoState({ permissions: ["other_permissions"] }),
     });
 
-    setup({ auth: state }, ["view_content"]);
+    setup({
+      authState: { auth: state },
+      requiredPermissions: ["view_content"],
+    });
 
     expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
   });
 
   it("redirects to login when user is not logged in and permissions required", () => {
-    setup({ auth: loggedOutState }, ["view_content"]);
+    setup({
+      authState: { auth: loggedOutState },
+      requiredPermissions: ["view_content"],
+    });
 
     expect(screen.getByText("Login Page")).toBeInTheDocument();
   });
 
   it("redirects to login when user is not logged in and requiredStaff", () => {
-    setup({ auth: loggedOutState }, [], true);
+    setup({
+      authState: { auth: loggedOutState },
+      requiredPermissions: ["view_content"],
+      requiredStaff: true,
+    });
 
     expect(screen.getByText("Login Page")).toBeInTheDocument();
   });
