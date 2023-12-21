@@ -1,7 +1,5 @@
 import { describe, it, expect } from "vitest";
 import { screen } from "@testing-library/react";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { AuthState } from "../../store/interfaces/authInterfaces";
 import ProtectedRoute from "../ProtectedRoute";
 import { renderWithProviders } from "../../__testUtils__/testStores";
 

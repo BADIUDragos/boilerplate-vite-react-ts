@@ -1,4 +1,4 @@
-import { MemoryRouter, Routes, Route, useRoutes } from 'react-router-dom';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 
 type RouteConfig = {
   path?: string;
