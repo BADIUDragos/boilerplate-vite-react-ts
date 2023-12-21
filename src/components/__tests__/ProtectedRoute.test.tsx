@@ -12,6 +12,7 @@ import {
   loggedOutState,
 } from "../../store/slices/__tests__/authSetups";
 import { IProtectedComponentSetupOptions } from "./ProtectedComponent.test";
+import { createTestRouter } from "../../__testUtils__/createTestRouter";
 
 describe("ProtectedRoute", () => {
   const setup = (
@@ -24,26 +25,28 @@ describe("ProtectedRoute", () => {
       requiredStaff = false,
     } = options;
 
-    renderWithProviders(
-      <MemoryRouter initialEntries={["/protected"]}>
-        <Routes>
-          <Route
-            path="/protected"
-            element={
-              <ProtectedRoute
-                redirectUrl={redirectUrl}
-                requiredPermissions={requiredPermissions}
-                requiredStaff={requiredStaff}
-              >
-                <div>Protected Content</div>
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/login" element={<div>Login Page</div>} />
-        </Routes>
-      </MemoryRouter>,
-      { preloadedState: authState }
-    );
+    const routes = [
+      {
+        path: "/protected",
+        element: (
+          <ProtectedRoute
+            redirectUrl={redirectUrl}
+            requiredPermissions={requiredPermissions}
+            requiredStaff={requiredStaff}
+          >
+            <div>Protected Content</div>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/login",
+        element: <div>Login Page</div>,
+      },
+    ];
+
+    renderWithProviders(createTestRouter(routes, "/protected"), {
+      preloadedState: authState,
+    });
   };
 
   it("renders children for authorized users", () => {
@@ -90,9 +93,9 @@ describe("ProtectedRoute", () => {
   });
 
   it("typescript error if at least one protection requirement isn't provided", () => {
-      // @ts-expect-error
-      <ProtectedRoute>
-        <div>Protected Content</div>
-      </ProtectedRoute>
+    // @ts-expect-error
+    <ProtectedRoute>
+      <div>Protected Content</div>
+    </ProtectedRoute>;
   });
 });
