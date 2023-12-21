@@ -10,44 +10,32 @@ import {
 } from "../../store/slices/__tests__/authSetups";
 
 import Header from "../Header";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { AuthState, UserInfoState } from "../../store/interfaces/authInterfaces";
+import { createTestRouter } from "../../__testUtils__/createTestRouter";
+
+const routes = [
+  {
+    element: (
+      <>
+        <Header />
+        <Outlet />
+      </>
+    ),
+    children: [
+      { path: "/", element: <div>Home Page</div> },
+      { path: "/somepage", element: <div>Any Page</div> },
+      { path: "/login", element: <div>Login Page</div> }
+    ],
+    errorElement: <div>Error Page</div>
+  }
+];
 
 describe("Header rendering tests", () => {
   const setup = (authState: { auth: AuthState }, route = "/somepage") => {
     return renderWithProviders(
-      <MemoryRouter initialEntries={[route]}>
-        <Routes>
-          <Route
-            path="/somepage"
-            element={
-              <>
-                <Header />
-                <div>Any Page</div>
-              </>
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              <>
-                <Header />
-                <div>Login Page</div>
-              </>
-            }
-          />
-          <Route
-            path="/"
-            element={
-              <>
-                <Header />
-                <div>Home Page</div>
-              </>
-            }
-          />
-        </Routes>
-      </MemoryRouter>,
-      { preloadedState: authState, route: route }
+      createTestRouter(routes, route),
+      { preloadedState: authState }
     );
   };
 

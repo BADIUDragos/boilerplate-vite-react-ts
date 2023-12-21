@@ -1,7 +1,7 @@
 import { HomePage, LoginPage, Layout, ErrorPage, NotFoundPage } from "../pages"
 import { createBrowserRouter } from "react-router-dom";
 
-const router = createBrowserRouter([
+export const routes = [
   {
     element: <Layout/>,
     children: [
@@ -11,6 +11,8 @@ const router = createBrowserRouter([
     ],
     errorElement: <ErrorPage />,
   }
-]);
+]
+
+const router = createBrowserRouter(routes);
 
 export default router;

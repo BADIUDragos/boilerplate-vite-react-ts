@@ -13,21 +13,20 @@ const invalidAccessTokenError = {
 
 export const baseQueriesHandlers = [
   http.post(`${API_URL}/auth/login`, async () => {
-    return new HttpResponse(
-      JSON.stringify(invalidAccessTokenError), 
-      { status: 401 }
-    );
+    return new HttpResponse(JSON.stringify(invalidAccessTokenError), {
+      status: 401,
+    });
   }),
   http.post(`${API_URL}/auth/login/refresh`, async () => {
     return HttpResponse.json(reAuthedTokens);
   }),
 ];
 
-export const failedRefreshTokenHandler = http.post(`${API_URL}/auth/login/refresh`, async () => {
-  return new HttpResponse( null, {
-    status: 401
-  })
-})
-
-
-
+export const failedRefreshTokenHandler = http.post(
+  `${API_URL}/auth/login/refresh`,
+  async () => {
+    return new HttpResponse(null, {
+      status: 401,
+    });
+  }
+);
