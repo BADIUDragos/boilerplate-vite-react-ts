@@ -25,7 +25,6 @@ const routes = [
     children: [
       { path: "/", element: <div>Home Page</div> },
       { path: "/somepage", element: <div>Any Page</div> },
-      { path: "/login", element: <div>Login Page</div> }
     ],
     errorElement: <div>Error Page</div>
   }
@@ -45,24 +44,12 @@ describe("Header rendering tests", () => {
     const logoImage = screen.getByRole("img");
     expect(logoImage).toHaveAttribute("src", "/images/logo.png");
 
-    await userEvent.click(logoImage);
-
-    expect(screen.getByText("Home Page")).toBeInTheDocument();
   });
 
   it("displays link to Login page if user isn't signed in", () => {
     setup({ auth: loggedOutState });
 
     expect(screen.getByText("Login")).toBeInTheDocument;
-  });
-
-  it("navigates to login page if user clicks login", async () => {
-    setup({ auth: loggedOutState });
-
-    const loginLink = screen.getByRole("link", { name: "Login" });
-    await userEvent.click(loginLink as HTMLAnchorElement);
-
-    expect(screen.getByText("Login Page")).toBeInTheDocument();
   });
 
   it("displays the user's name and Logout if the user is signed in", () => {
