@@ -22,3 +22,12 @@ export const baseQueriesHandlers = [
     return HttpResponse.json(reAuthedTokens);
   }),
 ];
+
+export const failedRefreshTokenHandler = http.post(`${API_URL}/auth/login/refresh`, async () => {
+  return new HttpResponse( null, {
+    status: 401
+  })
+})
+
+
+
