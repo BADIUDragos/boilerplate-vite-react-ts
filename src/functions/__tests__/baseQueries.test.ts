@@ -8,7 +8,7 @@ import { AuthState, LoginCredentials } from "../../store/interfaces/authInterfac
 import { createAuthState, createTokensState, createUserInfoState, tokenBody } from "../../store/slices/__tests__/authSetups";
 import { failedMutation, pendingMutation, uninitializedMutation } from "../../store/apis/__tests__/mutationObjectStates";
 import { initializeTestServer } from "../../__testUtils__/testServerSetup";
-import { baseQueriesHandlers } from "../../__testUtils__/mswHandlers/baseQueries/baseQueriesHandlers";
+import { baseQueriesHandlers } from "./baseQueriesHandlers";
 import setupStore from "../../store";
 
 const exampleTokenError = {

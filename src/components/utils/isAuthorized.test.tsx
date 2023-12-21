@@ -34,6 +34,16 @@ describe("isAuthorized", () => {
     expect(result).toBe(true);
   });
 
+  it("should return false for user when just requiredStaff", () => {
+    const userInfo = createUserInfoState();
+
+    const result = isAuthorized(userInfo, {
+      requiredPermissions: [],
+      requiredStaff: true,
+    });
+    expect(result).toBe(false);
+  });
+
   it("should return true for staff with the required permissions", () => {
     const userInfo = createUserInfoState({
       permissions: ["view_content"],

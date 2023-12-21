@@ -90,12 +90,9 @@ describe("ProtectedRoute", () => {
   });
 
   it("typescript error if at least one protection requirement isn't provided", () => {
-    renderWithProviders(
       // @ts-expect-error
       <ProtectedRoute>
         <div>Protected Content</div>
-      </ProtectedRoute>,
-      { preloadedState: { auth: createAuthState() } }
-    );
+      </ProtectedRoute>
   });
 });

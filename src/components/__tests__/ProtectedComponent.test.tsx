@@ -59,12 +59,9 @@ describe("ProtectedComponent", () => {
   });
 
   it("typescript error if at least one protection requirement isn't provided", () => {
-    renderWithProviders(
       // @ts-expect-error
       <ProtectedComponent>
         <div>Protected Content</div>
-      </ProtectedComponent>,
-      { preloadedState: {auth: createAuthState()} }
-    );
+      </ProtectedComponent>
   });
 });
