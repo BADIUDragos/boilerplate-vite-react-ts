@@ -7,11 +7,15 @@ import userEvent from "@testing-library/user-event";
 import {
   createAuthState,
   loggedOutState,
+  tokenBody,
 } from "../store/slices/__tests__/authSetups";
 
 import LoginPage from "./LoginPage";
 import { AuthState } from "../store/interfaces/authInterfaces";
 import { createTestRouter } from "../__testUtils__/createTestRouter";
+import { initializeTestServer } from "../__testUtils__/testServerSetup";
+import { authApiHandler, failedLogOutHandler, useLoginMutationFailedLoginHandler } from "../store/apis/__tests__/authApiHandlers";
+import { au } from "vitest/dist/reporters-LLiOBu3g.js";
 
 const routes = [
   {
@@ -56,17 +60,11 @@ describe("Testing UI components", () => {
   });
 });
 
-vi.mock("../store/apis/authApi", () => {
-  const triggerLogin = vi.fn();
-  return {
-    useLoginMutation: vi.fn(() => [
-      triggerLogin,
-      { isLoading: false, error: null },
-    ]),
-  };
-});
+
+initializeTestServer([useLoginMutationFailedLoginHandler])
 
 describe("Submit functionality", () => {
+
   it("calls login mutation successfully on submit", async () => {
     setup({ auth: loggedOutState });
 
@@ -78,12 +76,7 @@ describe("Submit functionality", () => {
     await userEvent.type(passwordInput, "password");
     await userEvent.click(submitButton);
 
-    const { useLoginMutation } = require("../../store/apis/authApi");
-    const [triggerLogin] = useLoginMutation();
+    expect(screen.getByText("No active account found with the given credentials")).toBeInTheDocument()
 
-    expect(triggerLogin).toHaveBeenCalledWith({
-      username: "username",
-      password: "password",
-    });
   });
 });

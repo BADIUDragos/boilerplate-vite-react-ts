@@ -13,14 +13,29 @@ export const authApiHandler = [
   }),
 ];
 
-export const failedLoginHandler = http.post(`${API_URL}/auth/login`, async () => {
-  return new HttpResponse( null, {
-    status: 401
-  })
-})
+export const failedLoginHandler = http.post(
+  `${API_URL}/auth/login`,
+  async () => {
+    return new HttpResponse(null, {
+      status: 401,
+    });
+  }
+);
 
-export const failedLogOutHandler = http.post(`${API_URL}/auth/logout`, async () => {
-  return new HttpResponse( null, {
-    status: 401
+export const failedLogOutHandler = http.post(
+  `${API_URL}/auth/logout`,
+  async () => {
+    return new HttpResponse(null, {
+      status: 401,
+    });
+  }
+);
+
+export const useLoginMutationFailedLoginHandler =   http.post('/auth', () => {
+  return HttpResponse.json({
+    status: 401,
+    data: {
+      detail: "No active account found with the given credentials"
+    }
   })
 })
