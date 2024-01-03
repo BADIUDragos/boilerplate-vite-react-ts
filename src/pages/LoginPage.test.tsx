@@ -76,7 +76,9 @@ describe("Submit functionality", () => {
     await userEvent.type(passwordInput, "password");
     await userEvent.click(submitButton);
 
-    expect(screen.getByText("No active account found with the given credentials")).toBeInTheDocument()
+    const errorMsg = await screen.findByText("No active account found with the given credentials")
+
+    expect(errorMsg).toBeInTheDocument()
 
   });
 });
