@@ -1,4 +1,4 @@
-import { vi, describe, it, expect } from "vitest";
+import { describe, it, expect } from "vitest";
 import { renderWithProviders } from "../__testUtils__/testStores";
 import { screen } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
@@ -7,15 +7,14 @@ import userEvent from "@testing-library/user-event";
 import {
   createAuthState,
   loggedOutState,
-  tokenBody,
 } from "../store/slices/__tests__/authSetups";
 
 import LoginPage from "./LoginPage";
 import { AuthState } from "../store/interfaces/authInterfaces";
 import { createTestRouter } from "../__testUtils__/createTestRouter";
 import { initializeTestServer } from "../__testUtils__/testServerSetup";
-import { authApiHandler, failedLogOutHandler, useLoginMutationFailedLoginHandler } from "../store/apis/__tests__/authApiHandlers";
-import { au } from "vitest/dist/reporters-LLiOBu3g.js";
+import {  useLoginMutationFailedLoginHandler } from "../store/apis/__tests__/authApiHandlers";
+
 
 const routes = [
   {
@@ -69,7 +68,7 @@ describe("Submit functionality", () => {
     setup({ auth: loggedOutState });
 
     const usernameInput = screen.getByPlaceholderText("Enter Username");
-    const passwordInput = screen.getByPlaceholderText("Enter Password");
+    const passwordInput = screen.getByPlaceholderText("Enter Password"); 
     const submitButton = screen.getByRole("button", { name: "Sign In" });
 
     await userEvent.type(usernameInput, "username");
