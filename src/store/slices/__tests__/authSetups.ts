@@ -21,7 +21,7 @@ export const otherTokenBody: TokensState = {
   refresh: "mock_refresh_token2",
 };
 
-export const reAuthedTokens: TokensState = {
+export const newReauthedToken: TokensState = {
   access:
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ1c2VyIiwicGVybWlzc2lvbnMiOlsidmlld19jb250ZW50IiwibmV3X3Blcm1pc3Npb24iXSwiZW1haWwiOiJ1c2VyQHJvbGxzLXJveWNlLmNvbSIsImlzU3VwZXJ1c2VyIjpmYWxzZSwiaXNTdGFmZiI6ZmFsc2V9.f93HUkTw-mSssaS_09BgBL03pyP8IsDgoZ2GxjQTqcM",
   refresh: "new_mock_refresh_token",

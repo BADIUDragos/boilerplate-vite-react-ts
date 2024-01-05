@@ -9,19 +9,10 @@ import React, { PropsWithChildren } from "react";
 interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
   preloadedState?: PreloadedState<RootState>;
   store?: AppStore;
-  route?: string
 }
-
-interface WrapperProps {
-  store: AppStore;
-}
-
-export const Wrapper: React.FC<PropsWithChildren<WrapperProps>> = ({ children, store }) => (
-  <Provider store={store}>{children}</Provider>
-);
 
 export const getWrapper = (store: AppStore) => {
-  return ({ children }: PropsWithChildren<{}>) => <Wrapper store={store}>{children}</Wrapper>;
+  return ({ children }: PropsWithChildren<{}>) => <Provider store={store}>{children}</Provider>;
 };
 
 export function renderWithProviders(

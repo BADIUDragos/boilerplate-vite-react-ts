@@ -55,7 +55,7 @@ const LoginPage: React.FC = () => {
         </Form.Group>
 
         {isLoading ? (
-          <Loader className="mt-3" style={{ height: "40px", width: "40px" }} />
+          <Loader data-testid="loader" className="mt-3" style={{ height: "40px", width: "40px" }} />
         ) : (
           <Button
             type="submit"

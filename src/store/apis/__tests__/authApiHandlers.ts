@@ -31,11 +31,7 @@ export const failedLogOutHandler = http.post(
   }
 );
 
-export const useLoginMutationFailedLoginHandler =   http.post('/auth/login', () => {
-  return HttpResponse.json(
-    {
-      status: 401,
-      detail: "No active account found with the given credentials"
-    }
-  )
+export const useLoginMutationFailedLoginHandler = http.post('/auth/login', () => {
+  setTimeout(() => {}, 1000)
+  return HttpResponse.error()
 })

@@ -1,6 +1,6 @@
 import { useAuth } from "../store";
 import isAuthorized, { IAuthorizationRequirements } from "./utils/isAuthorized";
-import RequireAtLeastOne from "../functions/typeGuards/requireAtLeastOne";
+import RequireAtLeastOne from "../interfaces/requireAtLeastOne";
 
 export interface IProtectedComponent extends IAuthorizationRequirements {
   children: React.ReactNode;

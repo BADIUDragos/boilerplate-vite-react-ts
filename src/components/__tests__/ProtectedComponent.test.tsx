@@ -11,40 +11,42 @@ import {
 } from "../../store/slices/__tests__/authSetups";
 import { IAuthorizationRequirements } from "../utils/isAuthorized";
 
-export interface IProtectedComponentSetupOptions extends IAuthorizationRequirements {
-  authState: { auth: AuthState };
+export interface IProtectedComponentSetupOptions
+  extends IAuthorizationRequirements {
+  preloadedState: { auth: AuthState };
 }
 
 describe("ProtectedComponent", () => {
-  const setup = (
-    options: IProtectedComponentSetupOptions
-) => {
-    const { 
-        authState, 
-        requiredPermissions = [],
-        requiredStaff = false
+  const setup = (options: IProtectedComponentSetupOptions) => {
+    const {
+      preloadedState,
+      requiredPermissions = [],
+      requiredStaff = false,
     } = options;
 
     renderWithProviders(
-        <>
-            test
-            <ProtectedComponent
-                requiredPermissions={requiredPermissions}
-                requiredStaff={requiredStaff}
-            >
-                <div>Protected Content</div>
-            </ProtectedComponent>
-        </>,
-        { preloadedState: authState }
+      <>
+        test
+        <ProtectedComponent
+          requiredPermissions={requiredPermissions}
+          requiredStaff={requiredStaff}
+        >
+          <div>Protected Content</div>
+        </ProtectedComponent>
+      </>,
+      { preloadedState: preloadedState }
     );
-};
+  };
 
   it("renders children for authorized users", () => {
     const state = createAuthState();
 
-    setup({ authState: {auth: state}, requiredPermissions: ["view_content"], requiredStaff: false});
+    setup({
+      preloadedState: { auth: state },
+      requiredPermissions: ["view_content"],
+      requiredStaff: false,
+    });
 
-    expect(screen.getByText("test")).toBeInTheDocument();
     expect(screen.getByText("Protected Content")).toBeInTheDocument();
   });
 
@@ -53,15 +55,18 @@ describe("ProtectedComponent", () => {
       userInfo: createUserInfoState({ permissions: ["other_permissions"] }),
     });
 
-    setup({authState: {auth: state}, requiredPermissions: ["view_content"]});
+    setup({
+      preloadedState: { auth: state },
+      requiredPermissions: ["view_content"],
+    });
 
     expect(screen.queryByText("Protected Content")).not.toBeInTheDocument();
   });
 
   it("typescript error if at least one protection requirement isn't provided", () => {
-      // @ts-expect-error
-      <ProtectedComponent>
-        <div>Protected Content</div>
-      </ProtectedComponent>
+    // @ts-expect-error
+    <ProtectedComponent>
+      <div>Protected Content</div>
+    </ProtectedComponent>;
   });
 });

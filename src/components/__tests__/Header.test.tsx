@@ -10,7 +10,6 @@ import {
 } from "../../store/slices/__tests__/authSetups";
 
 import Header from "../Header";
-import { Outlet } from "react-router-dom";
 import { AuthState, UserInfoState } from "../../store/interfaces/authInterfaces";
 import { createTestRouter } from "../../__testUtils__/createTestRouter";
 
@@ -19,14 +18,12 @@ const routes = [
     element: (
       <>
         <Header />
-        <Outlet />
       </>
     ),
     children: [
       { path: "/", element: <div>Home Page</div> },
       { path: "/somepage", element: <div>Any Page</div> },
-    ],
-    errorElement: <div>Error Page</div>
+    ]
   }
 ];
 
@@ -38,56 +35,40 @@ describe("Header rendering tests", () => {
     );
   };
 
-  it("renders and navigates to home page when Rolls-Royce logo is clicked", async () => {
+  it("link element containing image has href to home page, displays link to Login page if logged out", async () => {
     setup({ auth: loggedOutState });
 
     const logoImage = screen.getByRole("img");
     expect(logoImage).toHaveAttribute("src", "/images/logo.png");
 
+    const linkElement = logoImage.parentElement;
+    expect(linkElement).toHaveAttribute('href', '/');
+
+    const linkElementLogin = screen.getByRole('link', { name: /login/i });
+    expect(linkElementLogin).toHaveAttribute('href', '/login');
+
   });
 
-  it("displays link to Login page if user isn't signed in", () => {
-    setup({ auth: loggedOutState });
-
-    expect(screen.getByText("Login")).toBeInTheDocument;
-  });
-
-  it("displays the user's name and Logout if the user is signed in", () => {
+  it("displays the user's name and Logout if the user is signed in", async () => {
     const authState = createAuthState();
-    const { userInfo } = authState;
-    const { username } = userInfo as UserInfoState;
 
     setup({ auth: authState });
 
-    const usernameText = screen.getByText(`Hi ${username} !`);
+    const usernameText = screen.getByText(`Hi ${authState.userInfo?.username} !`);
 
     expect(usernameText).toBeInTheDocument;
     const logout = screen.getByRole("button", { name: "Logout" });
     expect(logout).toBeInTheDocument;
-  });
-
-  it("logs out and username is no longer in header", async () => {
-    const authState = createAuthState();
-    const { userInfo } = authState;
-    const { username } = userInfo as UserInfoState;
-
-    setup({ auth: createAuthState() });
-
-    const logout = screen.getByRole("button", { name: "Logout" });
 
     await userEvent.click(logout);
 
-    const usernameText = screen.queryByText(`Hi ${username} !`);
-
     expect(usernameText).not.toBeInTheDocument;
-    expect(logout).not.toBeInTheDocument;5 
-  });
+    expect(logout).not.toBeInTheDocument;
 
-  it("renders app name", async () => {
-    setup({ auth: loggedOutState });
+    const linkElementLogin = screen.getByRole('link', { name: /login/i });
+    expect(linkElementLogin).toBeInTheDocument()
 
     const appText = screen.getByText("Boilerplate APP")
-
-    expect(appText).not.toBeInTheDocument;
+    expect(appText).toBeInTheDocument;
   });
 });

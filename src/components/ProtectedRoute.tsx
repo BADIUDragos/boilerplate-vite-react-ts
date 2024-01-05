@@ -1,10 +1,10 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../store";
 import isAuthorized from "./utils/isAuthorized";
-import RequireAtLeastOne from "../functions/typeGuards/requireAtLeastOne";
+import RequireAtLeastOne from "../interfaces/requireAtLeastOne";
 import { IProtectedComponent } from "./ProtectedComponent";
 
-interface IProtectedRoute extends IProtectedComponent {
+export interface IProtectedRoute extends IProtectedComponent {
   redirectUrl?: string;
 }
 

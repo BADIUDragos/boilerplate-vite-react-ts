@@ -4,7 +4,7 @@ import { useLoginMutation } from "../../store/apis/authApi";
 import { act } from "react-dom/test-utils";
 import { renderHook, waitFor } from "@testing-library/react";
 import { AuthState, LoginCredentials } from "../../store/interfaces/authInterfaces";
-import { createAuthState, createTokensState, createUserInfoState, reAuthedTokens, tokenBody } from "../../store/slices/__tests__/authSetups";
+import { createAuthState, createTokensState, createUserInfoState, newReauthedToken, tokenBody } from "../../store/slices/__tests__/authSetups";
 import { initializeTestServer } from "../../__testUtils__/testServerSetup";
 import { baseQueriesHandlers, failedRefreshTokenHandler } from "./baseQueriesHandlers";
 import setupStore from "../../store";
@@ -44,7 +44,7 @@ describe("baseQueryWithReauth", () => {
 
     const newAuthState = store.getState().auth
 
-    expect(newAuthState.tokens).toEqual(reAuthedTokens)
+    expect(newAuthState.tokens).toEqual(newReauthedToken)
 
   });
 
