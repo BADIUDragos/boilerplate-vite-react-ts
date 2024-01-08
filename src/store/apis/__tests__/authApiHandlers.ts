@@ -1,4 +1,4 @@
-import { HttpResponse, http } from "msw";
+import { HttpResponse, delay, http } from "msw";
 import { API_URL } from "../../../constants/urls";
 import { tokenBody } from "../../slices/__tests__/authSetups";
 
@@ -31,7 +31,7 @@ export const failedLogOutHandler = http.post(
   }
 );
 
-export const useLoginMutationFailedLoginHandler = http.post('/auth/login', () => {
-  setTimeout(() => {}, 1000)
+export const useLoginMutationFailedLoginHandler = http.post('/auth/login', async () => {
+  await delay(1500)
   return HttpResponse.error()
 })

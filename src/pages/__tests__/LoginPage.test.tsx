@@ -36,7 +36,7 @@ const setup = (authState: { auth: AuthState }) => {
 describe("Testing UI components", () => {
   it("renders the username input, password input and submit button", () => {
     setup({ auth: loggedOutState });
-    const usernameInput = screen.getByPlaceholderText("Enter Username");
+    const usernameInput = screen.getByRole('textbox', { name: /username/i });
     expect(usernameInput).toBeInTheDocument();
 
     const passwordInput = screen.getByPlaceholderText("Enter Password");

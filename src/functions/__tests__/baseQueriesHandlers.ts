@@ -1,6 +1,6 @@
 import { HttpResponse, http } from "msw";
 import { API_URL } from "../../constants/urls";
-import { reAuthedTokens } from "../../store/slices/__tests__/authSetups";
+import { newReauthedToken } from "../../store/slices/__tests__/authSetups";
 
 const invalidAccessTokenError = {
   code: "token_not_valid",
@@ -17,8 +17,9 @@ export const baseQueriesHandlers = [
       status: 401,
     });
   }),
+  
   http.post(`${API_URL}/auth/login/refresh`, async () => {
-    return HttpResponse.json(reAuthedTokens);
+    return HttpResponse.json(newReauthedToken);
   }),
 ];
 

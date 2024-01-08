@@ -32,7 +32,7 @@ const LoginPage: React.FC = () => {
       <h1>Sign In</h1>
 
       <Form onSubmit={submitHandler}>
-        <Form.Group controlId="email">
+        <Form.Group controlId="username">
           <Form.Label>Username</Form.Label>
           <Form.Control
             required
