@@ -117,10 +117,6 @@ describe("Login User", () => {
         tokens: createTokensState({access: tokenBody.access})
     })};
 
-    const expectedAuthState = {
-      auth: loggedOutState,
-    };
-
     const store = setupStore(preloadedState);
     const wrapper = getWrapper(store);
 
@@ -154,7 +150,7 @@ describe("Login User", () => {
     );
 
     const newUserInfoState = store.getState().auth;
-    expect(newUserInfoState).toEqual(expectedAuthState.auth);
+    expect(newUserInfoState).toEqual(loggedOutState);
   });
 
   it("fails userLogoutMutation but still logs out of front end", async () => {

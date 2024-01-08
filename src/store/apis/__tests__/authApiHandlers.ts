@@ -2,15 +2,25 @@ import { HttpResponse, delay, http } from "msw";
 import { API_URL } from "../../../constants/urls";
 import { tokenBody } from "../../slices/__tests__/authSetups";
 
-export const authApiHandler = [
-  http.post(`${API_URL}/auth/login`, async () => {
+export const successfullLoginHandler = http.post(
+  `${API_URL}/auth/login`,
+  async () => {
     return HttpResponse.json(tokenBody);
-  }),
-  http.post(`${API_URL}/auth/logout`, async () => {
+  }
+);
+
+export const successfulLogoutHandler = http.post(
+  `${API_URL}/auth/logout`,
+  async () => {
     return new HttpResponse(null, {
       status: 200,
     });
-  }),
+  }
+);
+
+export const authApiHandler = [
+  successfullLoginHandler,
+  successfulLogoutHandler,
 ];
 
 export const failedLoginHandler = http.post(
@@ -31,7 +41,10 @@ export const failedLogOutHandler = http.post(
   }
 );
 
-export const useLoginMutationFailedLoginHandler = http.post('/auth/login', async () => {
-  await delay(1500)
-  return HttpResponse.error()
-})
+export const useLoginMutationFailedLoginHandler = http.post(
+  `${API_URL}/auth/login`,
+  async () => {
+    await delay(1500);
+    return HttpResponse.error();
+  }
+);

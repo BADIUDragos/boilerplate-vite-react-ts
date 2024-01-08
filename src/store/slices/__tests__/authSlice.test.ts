@@ -12,22 +12,16 @@ import {
   otherTokenBody,
   tokenBody,
 } from "./authSetups";
-import { decodeToken } from "../../../functions/decodeToken";
 
 const filledInitialState: AuthState = {
   tokens: createTokensState(),
   userInfo: createUserInfoState(),
 };
 
-describe("getTokensFromLocalStorage function", () => {
-
-  vi.mock('./path-to-decodeToken', () => ({
-    decodeToken: vi.fn(),
-  }));
+describe("getInitialAuthState function", () => {
 
   beforeEach(() => {
     localStorage.clear();
-    vi.restoreAllMocks();
   });
 
   it('returns null for both tokens and userInfo when localStorage is empty', () => {

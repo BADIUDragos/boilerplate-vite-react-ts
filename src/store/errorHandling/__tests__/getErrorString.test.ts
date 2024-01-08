@@ -34,7 +34,7 @@ describe("getErrorString function", () => {
       data: { notDetail: 'Some error data' }
     };
     
-    const result = getErrorString(errorWithoutMessageOrDetail as any);
+    const result = getErrorString(errorWithoutMessageOrDetail);
     expect(result).toBe('Unknown error');
   });
 
@@ -44,7 +44,7 @@ describe("getErrorString function", () => {
       data: { detail: { some: 'object' } }
     };
     
-    const result = getErrorString(errorWithNonStringDetail as any);
+    const result = getErrorString(errorWithNonStringDetail);
     expect(result).toBe('Unknown error');
   });
 });
