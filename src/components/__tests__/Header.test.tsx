@@ -65,8 +65,8 @@ describe("Header rendering tests", () => {
     expect(usernameText).not.toBeInTheDocument;
     expect(logout).not.toBeInTheDocument;
 
-    const linkElementLogin = screen.getByRole('link', { name: /login/i });
-    expect(linkElementLogin).toBeInTheDocument()
+    const logoutButton = screen.getByRole('button', { name: 'Logout' });
+    expect(logoutButton).toBeInTheDocument();
 
     const appText = screen.getByText("Boilerplate APP")
     expect(appText).toBeInTheDocument;

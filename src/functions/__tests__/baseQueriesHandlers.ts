@@ -3,7 +3,7 @@ import { API_URL } from "../../constants/urls";
 import { newReauthedToken } from "../../store/slices/__tests__/authSetups";
 import { TokenError } from "../typeGuards/isTokenInvalidError";
 
-const invalidAccessTokenErrorData: TokenError = {
+export const invalidAccessTokenErrorData: TokenError = {
   code: "token_not_valid",
   messages: [
     {

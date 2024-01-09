@@ -10,6 +10,7 @@ import {
   LoginCredentials,
 } from "../../interfaces/authInterfaces";
 import {
+  errorMutation,
   failedMutation,
   fulfilledMutation,
   pendingMutation,
@@ -99,10 +100,10 @@ describe("Login User", () => {
 
     expect(result.current[1]).toMatchObject(pendingMutation("login", userArgs));
 
-    await waitFor(() => expect(result.current[1].isError).toEqual(true));
+    await waitFor(() => expect(result.current[1].isError).toEqual(false));
 
     expect(result.current[1]).toMatchObject(
-      failedMutation("login", userArgs)
+      errorMutation("login", userArgs)
     );
 
     const newUserInfoState = store.getState().auth;

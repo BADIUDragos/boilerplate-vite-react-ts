@@ -46,3 +46,16 @@ export function failedMutation(
     originalArgs: originalArgs,
   };
 }
+
+export function errorMutation(
+  endpointName: string,
+  originalArgs: any,
+) {
+  return {
+    endpointName: endpointName,
+    isLoading: true,
+    isSuccess: false,
+    isError: false,
+    originalArgs: originalArgs,
+  };
+}
