@@ -2,7 +2,6 @@ import authReducer, { setCredentials, logOut, getInitialAuthState } from "../aut
 import {
   AuthState,
   TokensState,
-  UserInfoState,
 } from "../../interfaces/authInterfaces";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import {
@@ -64,19 +63,15 @@ describe("authSlice basic functionalities", () => {
   it("should handle setCredentials and setItem to localstorage", () => {
     vi.spyOn(Storage.prototype, "setItem");
 
-    const tokens: TokensState = tokenBody;
-    const userInfo: UserInfoState =
-      filledInitialState.userInfo as UserInfoState;
-
-    const action = setCredentials({ tokens });
+    const action = setCredentials({ tokens: tokenBody });
     const newState = authReducer(loggedOutState, action);
 
-    expect(newState.tokens).toEqual(tokens);
-    expect(newState.userInfo).toEqual(userInfo);
+    expect(newState.tokens).toEqual(tokenBody);
+    expect(newState.userInfo).toEqual(filledInitialState.userInfo);
 
     expect(localStorage.setItem).toHaveBeenCalledWith(
       "tokens",
-      JSON.stringify({ access: tokens.access, refresh: tokens.refresh })
+      JSON.stringify({ access: tokenBody.access, refresh: tokenBody.refresh })
     );
 
     vi.restoreAllMocks();
@@ -85,17 +80,15 @@ describe("authSlice basic functionalities", () => {
   it("should overrite current credentials if setCredentials called again", () => {
     vi.spyOn(Storage.prototype, "setItem");
 
-    const otherTokens: TokensState = otherTokenBody;
-
-    const action = setCredentials({ tokens: otherTokens });
+    const action = setCredentials({ tokens: otherTokenBody });
     const newState = authReducer(filledInitialState, action);
 
-    expect(newState.tokens).toEqual(otherTokens);
+    expect(newState.tokens).toEqual(otherTokenBody);
     expect(newState.userInfo).toEqual(createUserInfoState({permissions: ["view_content", "delete_content"], username: "other_user", email: "other_user@rolls-royce.com"}));
 
     expect(localStorage.setItem).toHaveBeenCalledWith(
       "tokens",
-      JSON.stringify({ access: otherTokens.access, refresh: otherTokens.refresh })
+      JSON.stringify({ access: otherTokenBody.access, refresh: otherTokenBody.refresh })
     );
 
     vi.restoreAllMocks();

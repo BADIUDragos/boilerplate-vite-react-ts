@@ -22,7 +22,6 @@ export const getInitialAuthState = (): AuthState => {
 
     return { tokens: parsedTokens, userInfo: userInfo };
   } catch (error: any) {
-    console.error("Error retrieving or decoding tokens", error);
     return { tokens: null, userInfo: null };
   }
 };

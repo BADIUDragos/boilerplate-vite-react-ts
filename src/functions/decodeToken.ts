@@ -15,7 +15,6 @@ export function decodeToken(token: string) {
     const { id, username, permissions, email, isSuperuser, isStaff } = decoded;
     return { id, username, permissions, email, isSuperuser, isStaff };
   } catch (error) {
-    console.error("Failed to decode token:", error, token);
     return null;
   }
 }
