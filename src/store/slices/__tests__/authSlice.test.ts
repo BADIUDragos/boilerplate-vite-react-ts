@@ -1,7 +1,6 @@
-import authReducer, { setCredentials, logOut, getInitialAuthState } from "../authSlice";
+import authReducer, { setCredentials, logOut, getInitialAuthState, getTokensFromLocalStorage } from "../authSlice";
 import {
   AuthState,
-  TokensState,
 } from "../../interfaces/authInterfaces";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import {
@@ -16,6 +15,27 @@ const filledInitialState: AuthState = {
   tokens: createTokensState(),
   userInfo: createUserInfoState(),
 };
+
+describe("getTokensFromLocalStorage tests", () => {
+
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  it('returns null  when localStorage is empty', () => {
+    const tokens = getTokensFromLocalStorage();
+    expect(tokens).toBeNull();
+  });
+
+  it('parses valid tokens from localStorage', () => {
+
+    localStorage.setItem('tokens', JSON.stringify(tokenBody));
+
+    const state = getTokensFromLocalStorage();
+
+    expect(state).toEqual(tokenBody);
+  });
+})
 
 describe("getInitialAuthState function", () => {
 

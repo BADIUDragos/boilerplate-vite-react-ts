@@ -2,28 +2,33 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   AuthState,
   TokensState,
-  UserInfoState,
 } from "../interfaces/authInterfaces";
 import { decodeToken } from "../../functions/decodeToken";
 
-export const getInitialAuthState = (): AuthState => {
+export const getTokensFromLocalStorage = (): TokensState | null => {
   try {
     const tokensString = localStorage.getItem("tokens");
     if (!tokensString) {
-      return { tokens: null, userInfo: null };
+      return null;
     }
-
-    const parsedTokens: TokensState = JSON.parse(tokensString);
-    const userInfo: UserInfoState | null = decodeToken(parsedTokens.access);
-
-    if (!userInfo) {
-      return { tokens: null, userInfo: null };
-    }
-
-    return { tokens: parsedTokens, userInfo: userInfo };
+    return JSON.parse(tokensString) as TokensState;
   } catch (error: any) {
+    return null;
+  }
+};
+
+export const getInitialAuthState = (): AuthState => {
+  const parsedTokens = getTokensFromLocalStorage();
+  if (!parsedTokens) {
     return { tokens: null, userInfo: null };
   }
+
+  const userInfo = decodeToken(parsedTokens.access);
+  if (!userInfo) {
+    return { tokens: null, userInfo: null };
+  }
+
+  return { tokens: parsedTokens, userInfo: userInfo };
 };
 
 const initialState: AuthState = getInitialAuthState();
