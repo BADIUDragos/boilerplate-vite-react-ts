@@ -26,20 +26,17 @@ export const authApiHandler = [
 export const failedLoginHandler = http.post(
   `${API_URL}/auth/login`,
   async () => {
-    return HttpResponse.json({
-      detail: "No active account found with the given credentials",
-      status: 401
-    });
+    return HttpResponse.json(
+      { detail: "No active account found with the given credentials" },
+      { status: 401 }
+    );
   }
 );
 
 export const failedLogOutHandler = http.post(
   `${API_URL}/auth/logout`,
   async () => {
-    return HttpResponse.json(
-      { detail: "Some error" },
-      { status: 401,}
-    );
+    return HttpResponse.json({ detail: "Some error" }, { status: 401 });
   }
 );
 
