@@ -61,7 +61,7 @@ const server = initializeTestServer([useLoginMutationFailedLoginHandler])
 
 describe("Submit functionality", () => {
 
-  it("calls login mutation successfully on submit", async () => {
+  it("tests loader and error handling of login submission", async () => {
     setup({ auth: loggedOutState });
 
     const usernameInput = screen.getByPlaceholderText("Enter Username");
@@ -78,7 +78,7 @@ describe("Submit functionality", () => {
     expect(spinner).toBeInTheDocument();
     expect(submitButton).not.toBeInTheDocument()
 
-    const errorMsg = await screen.findByText("Unknown error")
+    const errorMsg = await screen.findByText("No active account found with the given credentials")
 
     expect(errorMsg).toBeInTheDocument()
 

@@ -33,7 +33,7 @@ export function fulfilledMutation(
   };
 }
 
-export function failedMutation(
+export function rejectedMutation(
   endpointName: string,
   originalArgs: any,
 ) {
@@ -43,19 +43,6 @@ export function failedMutation(
     isLoading: false,
     isSuccess: false,
     isError: true,
-    originalArgs: originalArgs,
-  };
-}
-
-export function errorMutation(
-  endpointName: string,
-  originalArgs: any,
-) {
-  return {
-    endpointName: endpointName,
-    isLoading: true,
-    isSuccess: false,
-    isError: false,
     originalArgs: originalArgs,
   };
 }

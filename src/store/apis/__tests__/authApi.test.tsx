@@ -11,7 +11,7 @@ import {
 } from "../../interfaces/authInterfaces";
 import {
   errorMutation,
-  failedMutation,
+  rejectedMutation,
   fulfilledMutation,
   pendingMutation,
   uninitializedMutation,
@@ -103,7 +103,7 @@ describe("Login User", () => {
     await waitFor(() => expect(result.current[1].isError).toEqual(false));
 
     expect(result.current[1]).toMatchObject(
-      errorMutation("login", userArgs)
+      rejectedMutation("login", userArgs)
     );
 
     const newUserInfoState = store.getState().auth;
@@ -193,7 +193,7 @@ describe("Login User", () => {
     await waitFor(() => expect(result.current[1].isError).toEqual(true));
 
     expect(result.current[1]).toMatchObject(
-      failedMutation("logout", refreshArg)
+      rejectedMutation("logout", refreshArg)
     );
 
     const newUserInfoState = store.getState().auth;
