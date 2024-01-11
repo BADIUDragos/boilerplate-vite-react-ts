@@ -100,7 +100,7 @@ describe("Login User", () => {
 
     expect(result.current[1]).toMatchObject(pendingMutation("login", userArgs));
 
-    await waitFor(() => expect(result.current[1].isError).toEqual(false));
+    await waitFor(() => expect(result.current[1].isError).toEqual(true));
 
     expect(result.current[1]).toMatchObject(
       rejectedMutation("login", userArgs)
