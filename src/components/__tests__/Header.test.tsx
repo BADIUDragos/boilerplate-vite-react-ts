@@ -10,7 +10,7 @@ import {
 } from "../../store/slices/__tests__/authSetups";
 
 import Header from "../Header";
-import { AuthState, UserInfoState } from "../../store/interfaces/authInterfaces";
+import { AuthState } from "../../store/interfaces/authInterfaces";
 import { createTestRouter } from "../../__testUtils__/createTestRouter";
 
 const routes = [
@@ -65,7 +65,7 @@ describe("Header rendering tests", () => {
     expect(usernameText).not.toBeInTheDocument;
     expect(logout).not.toBeInTheDocument;
 
-    const logoutButton = screen.getByRole('button', { name: 'Logout' });
+    const logoutButton = screen.getByText('Login');
     expect(logoutButton).toBeInTheDocument();
 
     const appText = screen.getByText("Boilerplate APP")

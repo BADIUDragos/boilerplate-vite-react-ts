@@ -42,7 +42,7 @@ export const failedLogOutHandler = http.post(
 export const useLoginMutationFailedLoginHandler = http.post(
   `${API_URL}/auth/login`,
   async () => {
-    await delay(1500);
+    await delay(100);
     return HttpResponse.error();
   }
 );

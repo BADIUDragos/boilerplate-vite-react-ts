@@ -4,11 +4,13 @@ import { Spinner } from "react-bootstrap";
 interface ILoader {
   style?: React.CSSProperties;
   className?: string;
+  testid?: string
 }
 
-const Loader: React.FC<ILoader> = ({ style, className }) => {
+const Loader: React.FC<ILoader> = ({ style, className, testid }) => {
   return (
     <Spinner
+      {...(testid && { 'data-testid': testid })}
       animation="border"
       role="status"
       className={className}
